@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class UniversalApiController extends Controller
 {
     // ============================================================
-    // PROPRIEDADES BASE
+    // PROPRIEDADES BASE 
     // ============================================================
     protected ?Model $model = null;
     protected ?string $requestClass = null;
