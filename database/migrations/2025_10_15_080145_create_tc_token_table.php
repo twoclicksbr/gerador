@@ -25,12 +25,6 @@ return new class extends Migration
             // Informações do dispositivo (navegador, sistema, etc.)
             $table->string('device_info')->nullable();
 
-            // Data e hora de expiração do token (24h padrão ou 90 dias se "lembrar senha")
-            $table->dateTime('dt_expiration')->nullable();
-
-            // Data e hora em que o usuário realizou logout
-            $table->dateTime('dt_logout')->nullable();
-
             $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();

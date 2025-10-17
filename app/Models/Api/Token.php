@@ -18,8 +18,6 @@ class Token extends Model
         'token',
         'ip_address',
         'device_info',
-        'dt_expiration',
-        'dt_logout',
         'active',
     ];
 

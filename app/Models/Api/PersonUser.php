@@ -26,4 +26,14 @@ class PersonUser extends Model
         'password',
         'remember_token',
     ];
+
+    public function credential()
+    {
+        return $this->belongsTo(Credential::class, 'id_credential');
+    }
+
+    public function person()
+    {
+        return $this->belongsTo(Person::class, 'id_person');
+    }
 }
