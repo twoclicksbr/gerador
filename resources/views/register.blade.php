@@ -324,7 +324,94 @@
                                     </div>
 
                                     <div class="row mb-5 gy-3">
-                                        <div class="col-md-8 fv-row">
+
+                                        <div class="col-12 col-md-6 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">WhatsApp:</label>
+                                            <div class="d-flex gap-3 align-items-center">
+                                                <div class="flex-shrink-0" style="width: 160px;">
+                                                    <select class="form-select form-select-solid" data-control="select2"
+                                                        data-placeholder="Selecione" id="kt_select_country_code">
+                                                        <option></option>
+                                                        <option value="+55"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/brazil.svg') }}"
+                                                            selected>Brasil (+55)</option>
+                                                        <option value="+54"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/argentina.svg') }}">
+                                                            Argentina (+54)</option>
+                                                        <option value="+591"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/bolivia.svg') }}">
+                                                            Bolívia (+591)</option>
+                                                        <option value="+56"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/chile.svg') }}">
+                                                            Chile
+                                                            (+56)</option>
+                                                        <option value="+57"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/colombia.svg') }}">
+                                                            Colômbia (+57)</option>
+                                                        <option value="+593"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/ecuador.svg') }}">
+                                                            Equador (+593)</option>
+                                                        <option value="+592"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/guyana.svg') }}">
+                                                            Guiana
+                                                            (+592)</option>
+                                                        <option value="+595"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/paraguay.svg') }}">
+                                                            Paraguai (+595)</option>
+                                                        <option value="+51"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/peru.svg') }}">
+                                                            Peru
+                                                            (+51)</option>
+                                                        <option value="+597"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/suriname.svg') }}">
+                                                            Suriname (+597)</option>
+                                                        <option value="+58"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/venezuela.svg') }}">
+                                                            Venezuela (+58)</option>
+                                                        <option value="+598"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/uruguay.svg') }}">
+                                                            Uruguai (+598)</option>
+                                                        <!-- Extras mantidos -->
+                                                        <option value="+1"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/united-states.svg') }}">
+                                                            EUA (+1)</option>
+                                                        <option value="+44"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/united-kingdom.svg') }}">
+                                                            Reino Unido (+44)</option>
+                                                        <option value="+351"
+                                                            data-kt-select2-country="{{ asset('assets/media/flags/portugal.svg') }}">
+                                                            Portugal (+351)</option>
+                                                    </select>
+                                                    {{-- <label for="kt_select_country_code">País</label> --}}
+                                                </div>
+
+                                                <input type="text" class="form-control form-control-solid flex-grow-1"
+                                                    placeholder="Número do WhatsApp" name="whatsapp_number" />
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const optionFormat = (item) => {
+                                                    if (!item.id) return item.text;
+                                                    const imgUrl = item.element.getAttribute('data-kt-select2-country');
+                                                    return $(
+                                                        `<span><img src="${imgUrl}" class="rounded-circle h-20px me-2" alt="flag"/>${item.text}</span>`
+                                                    );
+                                                };
+
+                                                $('#kt_select_country_code').select2({
+                                                    templateSelection: optionFormat,
+                                                    templateResult: optionFormat,
+                                                    minimumResultsForSearch: Infinity,
+                                                    dropdownParent: $('#kt_select_country_code').closest('.fv-row')
+                                                });
+                                            });
+                                        </script>
+
+
+
+                                        <div class="col-12 col-md-3 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">CPF:</label>
                                             <input id="cpf" type="text" class="form-control form-control-solid"
                                                 placeholder="CPF" name="cpf" inputmode="numeric" maxlength="14" />
@@ -351,7 +438,7 @@
                                             </script>
                                         </div>
 
-                                        <div class="col-md-4 fv-row">
+                                        <div class="col-md-3 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Gênero:</label>
                                             <select class="form-control form-control-solid" name="gender"
                                                 data-control="select2">
