@@ -1,493 +1,517 @@
 @extends('layouts.app')
 
-@section('title', 'Home - DevsAPI')
-@section('page-title', 'home')
+@section('title', 'Funcionalidades - DevsAPI')
+@section('page-title', 'features')
 
 @section('content')
 
     <div class="wrapper d-flex flex-column flex-row-fluid mt-5 mt-lg-10" id="kt_wrapper">
-        <!--begin::Content-->
         <div class="content flex-column-fluid" id="kt_content">
-            <!--begin::Toolbar-->
             <div class="toolbar d-flex flex-stack flex-wrap mb-5 mb-lg-7" id="kt_toolbar">
-                <!--begin::Page title-->
                 <div class="page-title d-flex flex-column py-1">
-                    <!--begin::Title-->
+
                     <h1 class="d-flex align-items-center my-1">
-                        <span class="text-gray-900 fw-bold fs-1">All Questions</span>
-                        <!--begin::Description-->
-                        <small class="text-muted fs-6 fw-semibold ms-1">(6,299)</small>
-                        <!--end::Description-->
+                        <span class="text-gray-900 fw-bold fs-1">Funcionalidades</span>
                     </h1>
-                    <!--end::Title-->
+                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-1">
+                        <li class="breadcrumb-item text-muted">
+                            <a href="{{ route('home') }}" class="text-muted text-hover-primary">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <span class="bullet bg-gray-200 w-5px h-2px"></span>
+                        </li>
+
+                        <li class="breadcrumb-item text-gray-900">Funcionalidades</li>
+                    </ul>
                 </div>
-                <!--end::Page title-->
-                <!--begin::Actions-->
-                <div class="d-flex align-items-center py-1">
-                    <!--begin::Button-->
-                    <a href="apps/devs/ask.html" class="btn btn-flex btn-sm btn-primary fw-bold border-0 fs-6 h-40px"
-                        id="kt_toolbar_primary_button">Ask Question</a>
-                    <!--end::Button-->
-                </div>
-                <!--end::Actions-->
+
             </div>
-            <!--end::Toolbar-->
-            <!--begin::Post-->
             <div class="post" id="kt_post">
-                <!--begin::Questions-->
-                <div class="mb-10">
-                    <!--begin::Question-->
-                    <div class="mb-0">
-                        <!--begin::Head-->
-                        <div class="d-flex align-items-center mb-4">
-                            <!--begin::Title-->
-                            <a href="apps/devs/question.html" class="fs-2 fw-bold text-gray-900 text-hover-primary me-1">How
-                                to use
-                                Metronic with Django Framework ?</a>
-                            <!--end::Title-->
-                            <!--begin::Icons-->
-                            <div class="d-flex align-items-center">
-                                <span class="ms-1" data-bs-toggle="tooltip" title="New question">
-                                    <i class="ki-duotone ki-information-5 text-primary fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </i>
-                                </span>
-                                <span class="ms-1" data-bs-toggle="tooltip" title="User replied">
-                                    <i class="ki-duotone ki-sms text-danger fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </span>
+                <div class="card">
+                    <div class="card-body p-lg-17">
+                        <div class="position-relative mb-17">
+                            <div class="overlay overlay-show">
+                                <div class="bgi-no-repeat bgi-position-center bgi-size-cover card-rounded min-h-250px"
+                                    style="background-image:url('assets/media/stock/1600x800/img-1.jpg')"></div>
+                                <div class="overlay-layer rounded bg-black" style="opacity: 0.4"></div>
                             </div>
-                            <!--end::Icons-->
-                        </div>
-                        <!--end::Head-->
-                        <!--begin::Summary-->
-                        <div class="fs-base fw-normal text-gray-700 mb-4">I’ve been doing some ajax
-                            request, to populate a inside drawer, the content of that drawer has a sub menu,
-                            that you are using in list and all card toolbar.</div>
-                        <!--end::Summary-->
-                        <!--begin::Foot-->
-                        <div class="d-flex flex-stack flex-wrap">
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-2">
-                                    <div class="symbol-label bg-light-success fs-3 fw-semibold text-success text-uppercase">
-                                        J</div>
+                            <div class="position-absolute text-white mb-8 ms-10 bottom-0">
+                                <h3 class="text-white fs-2qx fw-bold mb-3 m">Careers at KeenThemes</h3>
+                                <div class="fs-5 fw-semibold">You sit down. You stare at your screen. The cursor blinks.
                                 </div>
-                                <!--end::Symbol-->
-                                <!--begin::Name-->
-                                <div class="d-flex flex-column align-items-start justify-content-center">
-                                    <span class="text-gray-900 fs-7 fw-semibold lh-1 mb-2">James
-                                        Hunt</span>
-                                    <span class="text-muted fs-8 fw-semibold lh-1">24 minutes ago</span>
-                                </div>
-                                <!--end::Name-->
                             </div>
-                            <!--end::Author-->
-                            <!--begin::Info-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Answers-->
-                                <a href="apps/devs/question.html#answers"
-                                    class="btn btn-sm btn-outline btn-outline-dashed btn-outline-default px-4 me-2">16
-                                    Answers</a>
-                                <!--end::Answers-->
-                                <!--begin::Tags-->
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">Metronic</a>
-                                <!--end::Tags-->
-                                <!--begin::Upvote-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light px-3" data-bs-toggle="tooltip"
-                                    title="Upvote this question" data-bs-dismiss="click">23
-                                    <i class="ki-duotone ki-black-right fs-3ms-2 me-0 fs-3"></i></a>
-                                <!--end::Upvote-->
-                            </div>
-                            <!--end::Info-->
                         </div>
-                        <!--end::Foot-->
+                        <div class="position-relative mb-17">
+                            <div class="overlay overlay-show">
+                                <form action="m-0" class="form mb-15" method="post" id="kt_careers_form">
+
+                                    <label class="fs-5 fw-semibold mt-10 mb-2">Planos</label>
+                                    <div class="separator mb-8"></div>
+
+                                    <!--begin::Interruptor Mensal/Anual-->
+                                    <div class=" mb-10">
+                                        <button
+                                            class="btn btn-color-gray-600 btn-active btn-active-secondary px-6 py-3 me-2 active"
+                                            data-kt-plan="month">Mensal</button>
+                                        <button class="btn btn-color-gray-600 btn-active btn-active-secondary px-6 py-3"
+                                            data-kt-plan="annual">Anual</button>
+                                    </div>
+
+                                    <!--begin::Planos-->
+                                    <div class="d-flex flex-wrap justify-content-between gap-5">
+                                        <label data-plan="starter"
+                                            class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6 active">
+                                            <h2 class="fs-3 fw-bold mb-1">Starter</h2>
+                                            <div>
+                                                <span class="fs-7 opacity-50 text-muted" data-kt-element="">R$</span>
+                                                <span class="fs-2x fw-bold text-primary" data-kt-plan-price-month="297"
+                                                    data-kt-plan-price-annual="247">297</span>
+                                                <span class="fs-7 opacity-50 text-muted"
+                                                    data-kt-element="period">/Mês</span>
+                                            </div>
+                                        </label>
+
+                                        <label data-plan="builder"
+                                            class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6">
+                                            <h2 class="fs-3 fw-bold mb-1">Builder</h2>
+                                            <div>
+                                                <span class="fs-7 opacity-50 text-muted" data-kt-element="">R$</span>
+                                                <span class="fs-2x fw-bold text-primary" data-kt-plan-price-month="597"
+                                                    data-kt-plan-price-annual="497">597</span>
+                                                <span class="fs-7 opacity-50 text-muted"
+                                                    data-kt-element="period">/Mês</span>
+                                            </div>
+                                        </label>
+
+                                        <label data-plan="infinity"
+                                            class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6">
+                                            <h2 class="fs-3 fw-bold mb-1">Infinity</h2>
+                                            <div>
+                                                <span class="fs-7 opacity-50 text-muted" data-kt-element="">R$</span>
+                                                <span class="fs-2x fw-bold text-primary" data-kt-plan-price-month="897"
+                                                    data-kt-plan-price-annual="747">897</span>
+                                                <span class="fs-7 opacity-50 text-muted"
+                                                    data-kt-element="period">/Mês</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <!--end::Planos-->
+
+                                    <input type="hidden" name="selected_period" id="selected_period" value="month">
+                                    <input type="hidden" name="selected_plan" id="selected_plan" value="starter">
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", () => {
+                                            const buttons = document.querySelectorAll("[data-kt-plan]");
+                                            const prices = document.querySelectorAll("[data-kt-plan-price-month]");
+                                            const labels = document.querySelectorAll("[data-plan]");
+                                            const inputPlan = document.getElementById("selected_plan");
+                                            const inputPeriod = document.getElementById("selected_period");
+
+                                            const params = new URLSearchParams(window.location.search);
+                                            const planFromUrl = params.get("plans");
+                                            const periodFromUrl = params.get("period");
+
+                                            function formatCurrency(value) {
+                                                const num = parseFloat(value.toString().replace(",", "."));
+                                                return num.toLocaleString("pt-BR", {
+                                                    minimumFractionDigits: 0
+                                                });
+                                            }
+
+                                            function setPeriod(period) {
+                                                buttons.forEach(b => b.classList.remove("active"));
+                                                const btn = document.querySelector(`[data-kt-plan="${period}"]`);
+                                                if (btn) btn.classList.add("active");
+
+                                                prices.forEach(span => {
+                                                    const monthValue = parseFloat(span.dataset.ktPlanPriceMonth);
+                                                    const annualValue = parseFloat(span.dataset.ktPlanPriceAnnual);
+                                                    const label = span.closest("label");
+                                                    const priceWrapper = span.parentElement;
+
+                                                    // cria container de extras se não existir
+                                                    let extraTop = label.querySelector(".plan-extra-top");
+                                                    let extraBottom = label.querySelector(".plan-extra-bottom");
+                                                    if (!extraTop) {
+                                                        extraTop = document.createElement("div");
+                                                        extraTop.className = "plan-extra-top text-muted small fw-semibold mb-1";
+                                                        priceWrapper.before(extraTop);
+                                                    }
+                                                    if (!extraBottom) {
+                                                        extraBottom = document.createElement("div");
+                                                        extraBottom.className = "plan-extra-bottom text-muted small mt-1";
+                                                        priceWrapper.after(extraBottom);
+                                                    }
+
+                                                    const periodEl = span.parentElement.querySelector("[data-kt-element='period']");
+
+                                                    if (period === "annual") {
+                                                        const total = annualValue * 12;
+                                                        extraTop.innerHTML = `Em até <strong>12x</strong>`;
+                                                        extraBottom.innerHTML = `Total: <strong>R$ ${formatCurrency(total)}</strong>`;
+                                                        span.textContent = formatCurrency(annualValue);
+                                                        if (periodEl) periodEl.textContent = "/Mês";
+                                                    } else {
+                                                        extraTop.innerHTML = "";
+                                                        extraBottom.innerHTML = "";
+                                                        span.textContent = formatCurrency(monthValue);
+                                                        if (periodEl) periodEl.textContent = "/Mês";
+                                                    }
+                                                });
+
+                                                inputPeriod.value = period;
+                                            }
+
+                                            function setPlan(plan) {
+                                                labels.forEach(l => l.classList.remove("active"));
+                                                const match = document.querySelector(`[data-plan="${plan}"]`);
+                                                if (match) {
+                                                    match.classList.add("active");
+                                                    inputPlan.value = plan;
+                                                }
+                                            }
+
+                                            if (periodFromUrl) setPeriod(periodFromUrl);
+                                            if (planFromUrl) setPlan(planFromUrl);
+
+                                            labels.forEach(label => {
+                                                label.addEventListener("click", () => {
+                                                    labels.forEach(l => l.classList.remove("active"));
+                                                    label.classList.add("active");
+                                                    inputPlan.value = label.dataset.plan;
+                                                });
+                                            });
+
+                                            buttons.forEach(btn => {
+                                                btn.addEventListener("click", e => {
+                                                    e.preventDefault();
+                                                    setPeriod(btn.getAttribute("data-kt-plan"));
+                                                });
+                                            });
+                                        });
+                                    </script>
+
+
+                                    <label class="fs-5 fw-semibold mt-10 mb-2">Acesso ao <strong>DevsAPI</strong></label>
+                                    <div class="separator mb-8"></div>
+                                    <div class="row mb-5 gy-3">
+                                        <div class="col-12 col-md-12 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">E-mail:</label>
+                                            <input type="text" class="form-control form-control-solid" placeholder=""
+                                                name="email" />
+                                        </div>
+
+                                        <div class="col-12 col-md-6 fv-row" data-kt-password-meter="true">
+                                            <div class="position-relative mb-3">
+                                                <label class="required fs-5 fw-semibold mb-2">Senha:</label>
+                                                <input id="password" class="form-control form-control-solid"
+                                                    type="password" placeholder="Senha" name="password"
+                                                    autocomplete="off" />
+
+                                                <span
+                                                    class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
+                                                    data-kt-password-meter-control="visibility">
+                                                    <i class="ki-duotone ki-eye-slash fs-2"></i>
+                                                    <i class="ki-duotone ki-eye fs-2 d-none"></i>
+                                                </span>
+                                            </div>
+
+                                            <div class="d-flex align-items-center mb-3"
+                                                data-kt-password-meter-control="highlight">
+                                                <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2">
+                                                </div>
+                                                <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2">
+                                                </div>
+                                                <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2">
+                                                </div>
+                                                <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px">
+                                                </div>
+                                            </div>
+
+                                            <div id="passwordMessage" class="text-muted">
+                                                Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao
+                                                menos uma letra maiúscula.
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            const passwordInput = document.getElementById('password');
+                                            const passwordMessage = document.getElementById('passwordMessage');
+                                            const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+                                            const defaultMsg =
+                                                'Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao menos uma letra maiúscula.';
+
+                                            passwordInput.addEventListener('input', function() {
+                                                const value = passwordInput.value.trim();
+
+                                                if (!value) {
+                                                    passwordMessage.textContent = defaultMsg;
+                                                    passwordMessage.className = 'text-muted';
+                                                    return;
+                                                }
+
+                                                if (!regex.test(value)) {
+                                                    passwordMessage.textContent = '❌ A senha ainda não atende aos requisitos.';
+                                                    passwordMessage.className = 'text-danger';
+                                                } else {
+                                                    passwordMessage.textContent = '✅ A senha atende a todos os requisitos.';
+                                                    passwordMessage.className = 'text-success';
+                                                }
+                                            });
+                                        </script>
+
+                                        <div class="col-12 col-md-6 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">Confirmar senha:</label>
+                                            <input id="confirm_password" type="password"
+                                                class="form-control form-control-solid" name="confirm_password"
+                                                autocomplete="off" />
+
+                                            <div id="confirmMessage" class="text-muted mt-1">
+                                                Repita a senha.
+                                            </div>
+                                        </div>
+
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const passwordInput = document.querySelector('input[name="password"]');
+                                                const confirmInput = document.getElementById('confirm_password');
+                                                const confirmMessage = document.getElementById('confirmMessage');
+                                                const defaultMsg = 'Repita a senha.';
+
+                                                function validateConfirm() {
+                                                    const pass = passwordInput.value.trim();
+                                                    const conf = confirmInput.value.trim();
+
+                                                    if (!conf) {
+                                                        confirmMessage.textContent = defaultMsg;
+                                                        confirmMessage.className = 'text-muted mt-1';
+                                                        return;
+                                                    }
+
+                                                    if (conf !== pass) {
+                                                        confirmMessage.textContent = '❌ As senhas não conferem.';
+                                                        confirmMessage.className = 'text-danger mt-1';
+                                                    } else {
+                                                        confirmMessage.textContent = '✅ As senhas conferem.';
+                                                        confirmMessage.className = 'text-success mt-1';
+                                                    }
+                                                }
+
+                                                // verifica sempre que digita em qualquer um dos dois campos
+                                                confirmInput.addEventListener('input', validateConfirm);
+                                                passwordInput.addEventListener('input', validateConfirm);
+                                            });
+                                        </script>
+                                    </div>
+
+                                    <label class="fs-5 fw-semibold mt-10 mb-2">Dados Pessoais</label>
+                                    <div class="separator mb-8"></div>
+                                    <div class="row mb-5 gy-3">
+                                        <div class="col-12 col-md-8 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">Nome:</label>
+                                            <input type="text" class="form-control form-control-solid"
+                                                placeholder="Nome Completo" name="name" />
+                                        </div>
+
+                                        <div class="col-12 col-md-4 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">Nascimento:</label>
+                                            <input type="date" class="form-control form-control-solid"
+                                                placeholder="Nome Completo" name="name" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row mb-5 gy-3">
+                                        <div class="col-md-8 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">CPF:</label>
+                                            <input id="cpf" type="text" class="form-control form-control-solid"
+                                                placeholder="CPF" name="cpf" inputmode="numeric" maxlength="14" />
+
+                                            <script>
+                                                const cpfInput = document.getElementById('cpf');
+
+                                                cpfInput.addEventListener('input', function(e) {
+                                                    // remove tudo que não for dígito e limita a 11 dígitos
+                                                    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+
+                                                    // aplica as quebras: 000.000.000-00
+                                                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                                                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                                                    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+                                                    e.target.value = v;
+                                                });
+
+                                                // se quiser o valor "limpo" (apenas dígitos) antes de enviar:
+                                                function getCpfOnlyDigits() {
+                                                    return cpfInput.value.replace(/\D/g, '');
+                                                }
+                                            </script>
+                                        </div>
+
+                                        <div class="col-md-4 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">Gênero:</label>
+                                            <select class="form-control form-control-solid" name="gender"
+                                                data-control="select2">
+                                                <option value="-">Selecione</option>
+                                                <option value="masculino">Masculino</option>
+                                                <option value="feminimo">Feminimo</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <label class="fs-5 fw-semibold mt-10 mb-2">Endereço</label>
+                                    <div class="separator mb-8"></div>
+                                    <div class="row gy-3">
+                                        <div class="col-md-2">
+                                            <label class="form-label required">CEP:</label>
+                                            <input type="text" id="zip_code" name="zip_code"
+                                                class="required form-control form-control-solid"
+                                                placeholder="Digite o CEP" maxlength="9" />
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <label class="form-label required">Rua:</label>
+                                            <input type="text" id="street" name="street"
+                                                class="required form-control form-control-solid"
+                                                placeholder="Nome da rua" />
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label class="form-label required">Número:</label>
+                                            <input type="text" id="number" name="number"
+                                                class="required form-control form-control-solid" placeholder="Número" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Complemento:</label>
+                                            <input type="text" id="complement" name="complement"
+                                                class="form-control form-control-solid"
+                                                placeholder="Complemento (opcional)" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label required">Bairro:</label>
+                                            <input type="text" id="district" name="district"
+                                                class="required form-control form-control-solid" placeholder="Bairro" />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label required">Cidade:</label>
+                                            <input type="text" id="city" name="city"
+                                                class="required form-control form-control-solid" placeholder="Cidade" />
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label class="form-label required">Estado:</label>
+                                            <input type="text" id="state" name="state"
+                                                class="required form-control form-control-solid" placeholder="UF"
+                                                maxlength="2" />
+                                        </div>
+
+
+                                    </div>
+
+                                    <script>
+                                        const zip = document.getElementById('zip_code');
+
+                                        zip.addEventListener('input', function(e) {
+                                            let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+                                            v = v.replace(/(\d{5})(\d)/, '$1-$2');
+                                            e.target.value = v;
+                                        });
+
+                                        zip.addEventListener('blur', function() {
+                                            const cep = zip.value.replace(/\D/g, '');
+                                            if (cep.length !== 8) return;
+
+                                            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                                                .then(r => r.json())
+                                                .then(data => {
+                                                    if (data.erro) return;
+                                                    document.getElementById('street').value = data.logradouro || '';
+                                                    document.getElementById('district').value = data.bairro || '';
+                                                    document.getElementById('city').value = data.localidade || '';
+                                                    document.getElementById('state').value = data.uf || '';
+                                                })
+                                                .catch(() => console.warn('Erro ao buscar CEP'));
+                                        });
+                                    </script>
+
+                                    <div class="separator mt-10 mb-8"></div>
+                                    <button type="submit" class="btn btn-primary" id="kt_careers_submit_button">
+                                        <span class="indicator-label">Apply Now</span>
+                                        <span class="indicator-progress">Please wait...
+                                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                    </button>
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", () => {
+                                            const btnSubmit = document.getElementById("kt_careers_submit_button");
+                                            const spanLabel = btnSubmit.querySelector(".indicator-label");
+                                            const inputPlan = document.getElementById("selected_plan");
+                                            const inputPeriod = document.getElementById("selected_period");
+                                            const planButtons = document.querySelectorAll("[data-plan]");
+                                            const periodButtons = document.querySelectorAll("[data-kt-plan]");
+
+                                            // Função: capitaliza a primeira letra
+                                            const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+                                            // Função: atualiza texto do botão
+                                            function updateButtonLabel() {
+                                                const plan = inputPlan.value?.trim() || "Starter";
+                                                const period = inputPeriod.value?.trim() === "annual" ? "Anual" : "Mensal";
+                                                spanLabel.textContent = `Criar conta no plano ${capitalize(plan)} - ${period}`;
+                                            }
+
+                                            // --- Eventos dos botões de plano ---
+                                            planButtons.forEach(label => {
+                                                label.addEventListener("click", () => {
+                                                    planButtons.forEach(l => l.classList.remove("active"));
+                                                    label.classList.add("active");
+                                                    inputPlan.value = label.dataset.plan;
+                                                    updateButtonLabel();
+                                                });
+                                            });
+
+                                            // --- Eventos dos botões Mensal/Anual ---
+                                            periodButtons.forEach(btn => {
+                                                btn.addEventListener("click", e => {
+                                                    e.preventDefault();
+                                                    periodButtons.forEach(b => b.classList.remove("active"));
+                                                    btn.classList.add("active");
+                                                    inputPeriod.value = btn.dataset.ktPlan;
+                                                    updateButtonLabel();
+                                                });
+                                            });
+
+                                            // --- Inicialização via URL ---
+                                            const params = new URLSearchParams(window.location.search);
+                                            const planFromUrl = params.get("plans");
+                                            const periodFromUrl = params.get("period");
+
+                                            if (planFromUrl) inputPlan.value = planFromUrl;
+                                            if (periodFromUrl) inputPeriod.value = periodFromUrl;
+                                            updateButtonLabel();
+                                        });
+                                    </script>
+
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                        @include('layouts.components.social')
+
                     </div>
-                    <!--end::Question-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-dashed border-gray-300 my-8"></div>
-                    <!--end::Separator-->
-                    <!--begin::Question-->
-                    <div class="mb-0">
-                        <!--begin::Head-->
-                        <div class="d-flex align-items-center mb-4">
-                            <!--begin::Title-->
-                            <a href="apps/devs/question.html"
-                                class="fs-2 fw-bold text-gray-900 text-hover-primary me-1">When to expect
-                                new version of Laravel ?</a>
-                            <!--end::Title-->
-                            <!--begin::Icons-->
-                            <div class="d-flex align-items-center">
-                                <span class="ms-1" data-bs-toggle="tooltip" title="In-process">
-                                    <i class="ki-duotone ki-information-5 text-warning fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </i>
-                                </span>
-                            </div>
-                            <!--end::Icons-->
-                        </div>
-                        <!--end::Head-->
-                        <!--begin::Summary-->
-                        <div class="fs-base fw-normal text-gray-700 mb-4">When approx. is the next update
-                            for the Laravel version planned? Waiting for the CRUD, 2nd factor etc. features
-                            before starting my project. Also can we expect the Laravel + Vue version in the
-                            next update ?</div>
-                        <!--end::Summary-->
-                        <!--begin::Foot-->
-                        <div class="d-flex flex-stack flex-wrap">
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-2">
-                                    <img src="assets/media/avatars/300-2.jpg" alt="user" />
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Name-->
-                                <div class="d-flex flex-column align-items-start justify-content-center">
-                                    <span class="text-gray-900 fs-7 fw-semibold lh-1 mb-2">Sandra
-                                        Piquet</span>
-                                    <span class="text-muted fs-8 fw-semibold lh-1">1 day ago</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                            <!--begin::Info-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Answers-->
-                                <a href="apps/devs/question.html#answers"
-                                    class="btn btn-sm btn-outline btn-outline-dashed btn-outline-default px-4 me-2">2
-                                    Answers</a>
-                                <!--end::Answers-->
-                                <!--begin::Tags-->
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">Pre-sale</a>
-                                <!--end::Tags-->
-                                <!--begin::Upvote-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light px-3" data-bs-toggle="tooltip"
-                                    title="Upvote this question" data-bs-dismiss="click">4
-                                    <i class="ki-duotone ki-black-right fs-3ms-2 me-0 fs-3"></i></a>
-                                <!--end::Upvote-->
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                        <!--end::Foot-->
-                    </div>
-                    <!--end::Question-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-dashed border-gray-300 my-8"></div>
-                    <!--end::Separator-->
-                    <!--begin::Question-->
-                    <div class="mb-0">
-                        <!--begin::Head-->
-                        <div class="d-flex align-items-center mb-4">
-                            <!--begin::Title-->
-                            <a href="apps/devs/question.html"
-                                class="fs-2 fw-bold text-gray-900 text-hover-primary me-1">Could not get
-                                Demo 7 working</a>
-                            <!--end::Title-->
-                            <!--begin::Icons-->
-                            <div class="d-flex align-items-center">
-                                <span class="ms-1" data-bs-toggle="tooltip" title="In-process">
-                                    <i class="ki-duotone ki-information-5 text-warning fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                        <span class="path3"></span>
-                                    </i>
-                                </span>
-                            </div>
-                            <!--end::Icons-->
-                        </div>
-                        <!--end::Head-->
-                        <!--begin::Summary-->
-                        <div class="fs-base fw-normal text-gray-700 mb-4">could not get demo7 working from
-                            latest metronic version. Had a lot of issues installing, I had to downgrade my
-                            npm to 6.14.4 as someone else recommended here in the comments, this goot it to
-                            compile but when I ran it, the browser showed errors TypeErr..</div>
-                        <!--end::Summary-->
-                        <!--begin::Foot-->
-                        <div class="d-flex flex-stack flex-wrap">
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-2">
-                                    <div
-                                        class="symbol-label bg-light-success fs-3 fw-semibold text-success text-uppercase">
-                                        N</div>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Name-->
-                                <div class="d-flex flex-column align-items-start justify-content-center">
-                                    <span class="text-gray-900 fs-7 fw-semibold lh-1 mb-2">Niko
-                                        Roseberg</span>
-                                    <span class="text-muted fs-8 fw-semibold lh-1">2 days ago</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                            <!--begin::Info-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Answers-->
-                                <a href="apps/devs/question.html#answers"
-                                    class="btn btn-sm btn-outline btn-outline-dashed btn-outline-default px-4 me-2">4
-                                    Answers</a>
-                                <!--end::Answers-->
-                                <!--begin::Tags-->
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">Angular</a>
-                                <!--end::Tags-->
-                                <!--begin::Upvote-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light btn-icon" data-bs-toggle="tooltip"
-                                    title="Upvote this question" data-bs-dismiss="click">
-                                    <i class="ki-duotone ki-black-right fs-3"></i>
-                                </a>
-                                <!--end::Upvote-->
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                        <!--end::Foot-->
-                    </div>
-                    <!--end::Question-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-dashed border-gray-300 my-8"></div>
-                    <!--end::Separator-->
-                    <!--begin::Question-->
-                    <div class="mb-0">
-                        <!--begin::Head-->
-                        <div class="d-flex align-items-center mb-4">
-                            <!--begin::Title-->
-                            <a href="apps/devs/question.html" class="fs-2 fw-bold text-gray-900 text-hover-primary me-1">I
-                                want to get
-                                refund</a>
-                            <!--end::Title-->
-                            <!--begin::Icons-->
-                            <div class="d-flex align-items-center">
-                                <span class="ms-1" data-bs-toggle="tooltip" title="Resolved">
-                                    <i class="ki-duotone ki-check-circle text-success fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </span>
-                            </div>
-                            <!--end::Icons-->
-                        </div>
-                        <!--end::Head-->
-                        <!--begin::Summary-->
-                        <div class="fs-base fw-normal text-gray-700 mb-4">Your Metronic theme is so good
-                            but the reactjs version is typescript only. The description did not write any
-                            warn about it. Since I only know javascript, I can not do anything with your
-                            theme. I want to refund.</div>
-                        <!--end::Summary-->
-                        <!--begin::Foot-->
-                        <div class="d-flex flex-stack flex-wrap">
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-2">
-                                    <img src="assets/media/avatars/300-23.jpg" alt="user" />
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Name-->
-                                <div class="d-flex flex-column align-items-start justify-content-center">
-                                    <span class="text-gray-900 fs-7 fw-semibold lh-1 mb-2">Alex
-                                        Bold</span>
-                                    <span class="text-muted fs-8 fw-semibold lh-1">1 day ago</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                            <!--begin::Info-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Answers-->
-                                <a href="apps/devs/question.html#answers"
-                                    class="btn btn-sm btn-outline btn-outline-dashed btn-outline-default px-4 me-2">22
-                                    Answers</a>
-                                <!--end::Answers-->
-                                <!--begin::Tags-->
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">React</a>
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">Demo
-                                    1</a>
-                                <!--end::Tags-->
-                                <!--begin::Upvote-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light px-3" data-bs-toggle="tooltip"
-                                    title="Upvote this question" data-bs-dismiss="click">11
-                                    <i class="ki-duotone ki-black-right fs-3ms-2 me-0 fs-3"></i></a>
-                                <!--end::Upvote-->
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                        <!--end::Foot-->
-                    </div>
-                    <!--end::Question-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-dashed border-gray-300 my-8"></div>
-                    <!--end::Separator-->
-                    <!--begin::Question-->
-                    <div class="mb-0">
-                        <!--begin::Head-->
-                        <div class="d-flex align-items-center mb-4">
-                            <!--begin::Title-->
-                            <a href="apps/devs/question.html"
-                                class="fs-2 fw-bold text-gray-900 text-hover-primary me-1">How to
-                                integrate Metronic with Blazor Server Side ?</a>
-                            <!--end::Title-->
-                            <!--begin::Icons-->
-                            <div class="d-flex align-items-center">
-                                <span class="ms-1" data-bs-toggle="tooltip" title="In-process">
-                                    <i class="ki-duotone ki-check-circle text-success fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </span>
-                            </div>
-                            <!--end::Icons-->
-                        </div>
-                        <!--end::Head-->
-                        <!--begin::Summary-->
-                        <div class="fs-base fw-normal text-gray-700 mb-4">could not get demo7 working from
-                            latest metronic version. Had a lot of issues installing, I had to downgrade my
-                            npm to 6.14.4 as someone else recommended here in the comments, this goot it to
-                            compile but when I ran it, the browser showed errors TypeErr..</div>
-                        <!--end::Summary-->
-                        <!--begin::Foot-->
-                        <div class="d-flex flex-stack flex-wrap">
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-2">
-                                    <div
-                                        class="symbol-label bg-light-success fs-3 fw-semibold text-success text-uppercase">
-                                        T</div>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Name-->
-                                <div class="d-flex flex-column align-items-start justify-content-center">
-                                    <span class="text-gray-900 fs-7 fw-semibold lh-1 mb-2">Tim
-                                        Nilson</span>
-                                    <span class="text-muted fs-8 fw-semibold lh-1">3 days ago</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                            <!--begin::Info-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Answers-->
-                                <a href="apps/devs/question.html#answers"
-                                    class="btn btn-sm btn-outline btn-outline-dashed btn-outline-default px-4 me-2">44
-                                    Answers</a>
-                                <!--end::Answers-->
-                                <!--begin::Tags-->
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">Blazor</a>
-                                <!--end::Tags-->
-                                <!--begin::Upvote-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light px-3" data-bs-toggle="tooltip"
-                                    title="Upvote this question" data-bs-dismiss="click">3
-                                    <i class="ki-duotone ki-black-right fs-3ms-2 me-0 fs-3"></i></a>
-                                <!--end::Upvote-->
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                        <!--end::Foot-->
-                    </div>
-                    <!--end::Question-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-dashed border-gray-300 my-8"></div>
-                    <!--end::Separator-->
-                    <!--begin::Question-->
-                    <div class="mb-0">
-                        <!--begin::Head-->
-                        <div class="d-flex align-items-center mb-4">
-                            <!--begin::Title-->
-                            <a href="apps/devs/question.html"
-                                class="fs-2 fw-bold text-gray-900 text-hover-primary me-1">Using Metronic
-                                with .NET multi tenant application</a>
-                            <!--end::Title-->
-                            <!--begin::Icons-->
-                            <div class="d-flex align-items-center">
-                                <span class="ms-1" data-bs-toggle="tooltip" title="Resolved">
-                                    <i class="ki-duotone ki-check-circle text-success fs-1">
-                                        <span class="path1"></span>
-                                        <span class="path2"></span>
-                                    </i>
-                                </span>
-                            </div>
-                            <!--end::Icons-->
-                        </div>
-                        <!--end::Head-->
-                        <!--begin::Summary-->
-                        <div class="fs-base fw-normal text-gray-700 mb-4">When approx. is the next update
-                            for the Laravel version planned? Waiting for the CRUD, 2nd factor etc. features
-                            before starting my project. Also can we expect the Laravel + Vue version in the
-                            next update ?</div>
-                        <!--end::Summary-->
-                        <!--begin::Foot-->
-                        <div class="d-flex flex-stack flex-wrap">
-                            <!--begin::Author-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-2">
-                                    <img src="assets/media/avatars/300-10.jpg" alt="user" />
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Name-->
-                                <div class="d-flex flex-column align-items-start justify-content-center">
-                                    <span class="text-gray-900 fs-7 fw-semibold lh-1 mb-2">Ana Quil</span>
-                                    <span class="text-muted fs-8 fw-semibold lh-1">5 days ago</span>
-                                </div>
-                                <!--end::Name-->
-                            </div>
-                            <!--end::Author-->
-                            <!--begin::Info-->
-                            <div class="d-flex align-items-center py-1">
-                                <!--begin::Answers-->
-                                <a href="apps/devs/question.html#answers"
-                                    class="btn btn-sm btn-outline btn-outline-dashed btn-outline-default px-4 me-2">2
-                                    Answers</a>
-                                <!--end::Answers-->
-                                <!--begin::Tags-->
-                                <a href="apps/devs/tag.html" class="btn btn-sm btn-light px-4 me-2">Aspdotnet</a>
-                                <!--end::Tags-->
-                                <!--begin::Upvote-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light px-3" data-bs-toggle="tooltip"
-                                    title="Upvote this question" data-bs-dismiss="click">4
-                                    <i class="ki-duotone ki-black-right fs-3ms-2 me-0 fs-3"></i></a>
-                                <!--end::Upvote-->
-                            </div>
-                            <!--end::Info-->
-                        </div>
-                        <!--end::Foot-->
-                    </div>
-                    <!--end::Question-->
-                    <!--begin::Separator-->
-                    <div class="separator separator-dashed border-gray-300 my-8"></div>
-                    <!--end::Separator-->
                 </div>
-                <!--end::Questions-->
-                <!--begin::Pagination-->
-                <div class="d-flex flex-center mb-0">
-                    <a href="#"
-                        class="btn btn-icon btn-light btn-active-light-primary h-30px w-30px fw-semibold fs-6 mx-2">1</a>
-                    <a href="#"
-                        class="btn btn-icon btn-light btn-active-light-primary h-30px w-30px fw-semibold fs-6 mx-2 active">2</a>
-                    <a href="#"
-                        class="btn btn-icon btn-light btn-active-light-primary h-30px w-30px fw-semibold fs-6 mx-2">3</a>
-                    <a href="#"
-                        class="btn btn-icon btn-light btn-active-light-primary h-30px w-30px fw-semibold fs-6 mx-2">4</a>
-                    <a href="#"
-                        class="btn btn-icon btn-light btn-active-light-primary h-30px w-30px fw-semibold fs-6 mx-2">5</a>
-                    <span class="text-muted fw-semibold fs-6 mx-2">..</span>
-                    <a href="#"
-                        class="btn btn-icon btn-light btn-active-light-primary h-30px w-30px fw-semibold fs-6 mx-2">19</a>
-                </div>
-                <!--end::Questions-->
             </div>
-            <!--end::Post-->
         </div>
-        <!--end::Content-->
     </div>
 
 @endsection

@@ -67,7 +67,7 @@
 
                 @yield('content')
 
-                @if (in_array(Route::currentRouteName(), ['home', 'about']))
+                @if (in_array(Route::currentRouteName(), ['home', 'about', 'register']))
                     @include('layouts.sidebar')
                 @endif
 

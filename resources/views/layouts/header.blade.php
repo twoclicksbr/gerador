@@ -3256,7 +3256,7 @@
                             
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                 data-kt-menu-placement="bottom-start"
-                                class="menu-item @if (Route::currentRouteName() === 'home') here show @endif menu-lg-down-accordion me-0 me-lg-2">
+                                class="menu-item @if (Route::currentRouteName() === 'home') here show @endif  me-0 me-lg-2">
                                 <a href="{{ route('home') }}" class="menu-link py-3">
                                     <span class="menu-title">Home</span>
                                     <span class="menu-arrow d-lg-none"></span>
@@ -3265,7 +3265,7 @@
                             
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                 data-kt-menu-placement="bottom-start"
-                                class="menu-item @if (Request::is('about*')) here show @endif menu-lg-down-accordion me-0 me-lg-2">
+                                class="menu-item @if (Request::is('about*')) here show @endif  me-0 me-lg-2">
                                 <a href="{{ route('about') }}" class="menu-link py-3">
                                     <span class="menu-title">Sobre</span>
                                     <span class="menu-arrow d-lg-none"></span>
@@ -3274,7 +3274,7 @@
 
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                 data-kt-menu-placement="bottom-start"
-                                class="menu-item @if (Request::is('features*')) here show @endif menu-lg-down-accordion me-0 me-lg-2">
+                                class="menu-item @if (Request::is('features*')) here show @endif  me-0 me-lg-2">
                                 <a href="{{ route('features') }}" class="menu-link py-3">
                                     <span class="menu-title">Funcionalidades</span>
                                     <span class="menu-arrow d-lg-none"></span>
@@ -3283,7 +3283,7 @@
 
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                 data-kt-menu-placement="bottom-start"
-                                class="menu-item @if (Request::is('plans*')) here show @endif menu-lg-down-accordion me-0 me-lg-2">
+                                class="menu-item @if (Request::is('plans*')) here show @endif  me-0 me-lg-2">
                                 <a href="{{ route('plans') }}" class="menu-link py-3">
                                     <span class="menu-title">Planos</span>
                                     <span class="menu-arrow d-lg-none"></span>
@@ -3292,7 +3292,7 @@
 
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
                                 data-kt-menu-placement="bottom-start"
-                                class="menu-item @if (Request::is('register*')) here show @endif menu-lg-down-accordion me-0 me-lg-2">
+                                class="menu-item @if (Request::is('register*')) here show @endif  me-0 me-lg-2">
                                 <a href="{{ route('register') }}" class="menu-link py-3">
                                     <span class="menu-title">Criar Conta</span>
                                     <span class="menu-arrow d-lg-none"></span>
