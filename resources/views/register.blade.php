@@ -43,13 +43,15 @@
                         </div>
                         <div class="position-relative mb-17">
                             <div class="overlay overlay-show">
-                                <form action="m-0" class="form mb-15" method="post" id="kt_careers_form">
+                                <form action="{{ route('register.store') }}" method="POST" class="form mb-15"
+                                    id="">
+                                    @csrf
 
                                     <label class="fs-5 fw-semibold mt-10 mb-2">Planos</label>
                                     <div class="separator mb-8"></div>
 
                                     <!--begin::Interruptor Mensal/Anual-->
-                                    <div class=" mb-10">
+                                    <div class="mb-10 text-center">
                                         <button
                                             class="btn btn-color-gray-600 btn-active btn-active-secondary px-6 py-3 me-2 active"
                                             data-kt-plan="month">Mensal</button>
@@ -59,46 +61,28 @@
 
                                     <!--begin::Planos-->
                                     <div class="d-flex flex-wrap justify-content-between gap-5">
-                                        <label data-plan="starter"
-                                            class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6 active">
-                                            <h2 class="fs-3 fw-bold mb-1">Starter</h2>
-                                            <div>
-                                                <span class="fs-7 opacity-50 text-muted" data-kt-element="">R$</span>
-                                                <span class="fs-2x fw-bold text-primary" data-kt-plan-price-month="297"
-                                                    data-kt-plan-price-annual="247">297</span>
-                                                <span class="fs-7 opacity-50 text-muted"
-                                                    data-kt-element="period">/Mês</span>
-                                            </div>
-                                        </label>
-
-                                        <label data-plan="builder"
-                                            class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6">
-                                            <h2 class="fs-3 fw-bold mb-1">Builder</h2>
-                                            <div>
-                                                <span class="fs-7 opacity-50 text-muted" data-kt-element="">R$</span>
-                                                <span class="fs-2x fw-bold text-primary" data-kt-plan-price-month="597"
-                                                    data-kt-plan-price-annual="497">597</span>
-                                                <span class="fs-7 opacity-50 text-muted"
-                                                    data-kt-element="period">/Mês</span>
-                                            </div>
-                                        </label>
-
-                                        <label data-plan="infinity"
-                                            class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6">
-                                            <h2 class="fs-3 fw-bold mb-1">Infinity</h2>
-                                            <div>
-                                                <span class="fs-7 opacity-50 text-muted" data-kt-element="">R$</span>
-                                                <span class="fs-2x fw-bold text-primary" data-kt-plan-price-month="897"
-                                                    data-kt-plan-price-annual="747">897</span>
-                                                <span class="fs-7 opacity-50 text-muted"
-                                                    data-kt-element="period">/Mês</span>
-                                            </div>
-                                        </label>
+                                        @foreach ($plans as $plan)
+                                            <label data-plan="{{ strtolower($plan->name) }}"
+                                                class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6 {{ $loop->first ? 'active' : '' }}">
+                                                <h2 class="fs-3 fw-bold mb-1">{{ $plan->name }}</h2>
+                                                <div>
+                                                    <span class="fs-7 opacity-50 text-muted">R$</span>
+                                                    <span class="fs-2x fw-bold text-primary"
+                                                        data-kt-plan-price-month="{{ $plan->price_monthly }}"
+                                                        data-kt-plan-price-annual="{{ $plan->price_yearly / 12 }}">
+                                                        {{ number_format($plan->price_monthly, 0, ',', '.') }}
+                                                    </span>
+                                                    <span class="fs-7 opacity-50 text-muted"
+                                                        data-kt-element="period">/Mês</span>
+                                                </div>
+                                            </label>
+                                        @endforeach
                                     </div>
                                     <!--end::Planos-->
 
                                     <input type="hidden" name="selected_period" id="selected_period" value="month">
-                                    <input type="hidden" name="selected_plan" id="selected_plan" value="starter">
+                                    <input type="hidden" name="selected_plan" id="selected_plan"
+                                        value="{{ strtolower($plans->first()->name ?? '') }}">
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", () => {
@@ -115,7 +99,8 @@
                                             function formatCurrency(value) {
                                                 const num = parseFloat(value.toString().replace(",", "."));
                                                 return num.toLocaleString("pt-BR", {
-                                                    minimumFractionDigits: 0
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
                                                 });
                                             }
 
@@ -128,20 +113,18 @@
                                                     const monthValue = parseFloat(span.dataset.ktPlanPriceMonth);
                                                     const annualValue = parseFloat(span.dataset.ktPlanPriceAnnual);
                                                     const label = span.closest("label");
-                                                    const priceWrapper = span.parentElement;
 
-                                                    // cria container de extras se não existir
                                                     let extraTop = label.querySelector(".plan-extra-top");
                                                     let extraBottom = label.querySelector(".plan-extra-bottom");
                                                     if (!extraTop) {
                                                         extraTop = document.createElement("div");
                                                         extraTop.className = "plan-extra-top text-muted small fw-semibold mb-1";
-                                                        priceWrapper.before(extraTop);
+                                                        label.prepend(extraTop);
                                                     }
                                                     if (!extraBottom) {
                                                         extraBottom = document.createElement("div");
                                                         extraBottom.className = "plan-extra-bottom text-muted small mt-1";
-                                                        priceWrapper.after(extraBottom);
+                                                        label.append(extraBottom);
                                                     }
 
                                                     const periodEl = span.parentElement.querySelector("[data-kt-element='period']");
@@ -172,9 +155,11 @@
                                                 }
                                             }
 
+                                            // Inicializa com parâmetros da URL (caso venha da página /plans)
                                             if (periodFromUrl) setPeriod(periodFromUrl);
                                             if (planFromUrl) setPlan(planFromUrl);
 
+                                            // Clique em planos
                                             labels.forEach(label => {
                                                 label.addEventListener("click", () => {
                                                     labels.forEach(l => l.classList.remove("active"));
@@ -183,6 +168,7 @@
                                                 });
                                             });
 
+                                            // Clique no interruptor Mensal/Anual
                                             buttons.forEach(btn => {
                                                 btn.addEventListener("click", e => {
                                                     e.preventDefault();
@@ -191,6 +177,7 @@
                                             });
                                         });
                                     </script>
+
 
 
                                     <label class="fs-5 fw-semibold mt-10 mb-2">Acesso ao <strong>DevsAPI</strong></label>
@@ -202,11 +189,41 @@
                                                 name="email" />
                                         </div>
 
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const emailInput = document.querySelector('input[name="email"]');
+                                                const feedback = document.createElement('div');
+                                                feedback.classList.add('mt-1', 'small');
+                                                emailInput.after(feedback);
+
+                                                emailInput.addEventListener('blur', function() {
+                                                    const email = emailInput.value.trim();
+                                                    if (!email) return;
+
+                                                    fetch(`/check-email?email=${encodeURIComponent(email)}`)
+                                                        .then(res => res.json())
+                                                        .then(data => {
+                                                            if (data.exists) {
+                                                                feedback.textContent = '❌ Este e-mail já está cadastrado.';
+                                                                feedback.className = 'text-danger small mt-1';
+                                                            } else {
+                                                                feedback.textContent = '✅ E-mail disponível.';
+                                                                feedback.className = 'text-success small mt-1';
+                                                            }
+                                                        })
+                                                        .catch(() => {
+                                                            feedback.textContent = 'Erro ao verificar e-mail.';
+                                                            feedback.className = 'text-muted small mt-1';
+                                                        });
+                                                });
+                                            });
+                                        </script>
+
                                         <div class="col-12 col-md-6 fv-row" data-kt-password-meter="true">
                                             <div class="position-relative mb-3">
                                                 <label class="required fs-5 fw-semibold mb-2">Senha:</label>
                                                 <input id="password" class="form-control form-control-solid"
-                                                    type="password" placeholder="Senha" name="password"
+                                                    type="password" placeholder="Senha" name="password" value="Millena2012@"
                                                     autocomplete="off" />
 
                                                 <span
@@ -266,7 +283,7 @@
                                             <label class="required fs-5 fw-semibold mb-2">Confirmar senha:</label>
                                             <input id="confirm_password" type="password"
                                                 class="form-control form-control-solid" name="confirm_password"
-                                                autocomplete="off" />
+                                                autocomplete="off" value="Millena2012@" />
 
                                             <div id="confirmMessage" class="text-muted mt-1">
                                                 Repita a senha.
@@ -317,8 +334,8 @@
 
                                         <div class="col-12 col-md-4 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Nascimento:</label>
-                                            <input type="date" class="form-control form-control-solid"
-                                                placeholder="Nome Completo" name="name" />
+                                            <input type="date" class="form-control form-control-solid" placeholder=""
+                                                name="birthdate" />
                                         </div>
 
                                     </div>
@@ -330,60 +347,108 @@
                                             <div class="d-flex gap-3 align-items-center">
                                                 <div class="flex-shrink-0" style="width: 160px;">
                                                     <select class="form-select form-select-solid" data-control="select2"
-                                                        data-placeholder="Selecione" id="kt_select_country_code">
+                                                        data-placeholder="Selecione" id="kt_select_country_code"
+                                                        name="country_code">
                                                         <option></option>
+
                                                         <option value="+55"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/brazil.svg') }}"
-                                                            selected>Brasil (+55)</option>
+                                                            selected>Brasil (+55)
+                                                        </option>
+
                                                         <option value="+54"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/argentina.svg') }}">
-                                                            Argentina (+54)</option>
+                                                            Argentina (+54)
+                                                        </option>
+
                                                         <option value="+591"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/bolivia.svg') }}">
-                                                            Bolívia (+591)</option>
+                                                            Bolívia (+591)
+                                                        </option>
+
                                                         <option value="+56"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/chile.svg') }}">
                                                             Chile
-                                                            (+56)</option>
+                                                            (+56)
+                                                        </option>
+
                                                         <option value="+57"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/colombia.svg') }}">
-                                                            Colômbia (+57)</option>
+                                                            Colômbia (+57)
+                                                        </option>
+
                                                         <option value="+593"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/ecuador.svg') }}">
-                                                            Equador (+593)</option>
+                                                            Equador (+593)
+                                                        </option>
+
                                                         <option value="+592"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/guyana.svg') }}">
                                                             Guiana
-                                                            (+592)</option>
+                                                            (+592)
+                                                        </option>
+
                                                         <option value="+595"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/paraguay.svg') }}">
-                                                            Paraguai (+595)</option>
+                                                            Paraguai (+595)
+                                                        </option>
+
                                                         <option value="+51"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/peru.svg') }}">
                                                             Peru
-                                                            (+51)</option>
+                                                            (+51)
+                                                        </option>
+
                                                         <option value="+597"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/suriname.svg') }}">
-                                                            Suriname (+597)</option>
+                                                            Suriname (+597)
+                                                        </option>
+
                                                         <option value="+58"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/venezuela.svg') }}">
-                                                            Venezuela (+58)</option>
+                                                            Venezuela (+58)
+                                                        </option>
+
                                                         <option value="+598"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/uruguay.svg') }}">
-                                                            Uruguai (+598)</option>
+                                                            Uruguai (+598)
+                                                        </option>
                                                         <!-- Extras mantidos -->
+
                                                         <option value="+1"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/united-states.svg') }}">
-                                                            EUA (+1)</option>
+                                                            EUA (+1)
+                                                        </option>
+
                                                         <option value="+44"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/united-kingdom.svg') }}">
-                                                            Reino Unido (+44)</option>
+                                                            Reino Unido (+44)
+                                                        </option>
+
                                                         <option value="+351"
                                                             data-kt-select2-country="{{ asset('assets/media/flags/portugal.svg') }}">
-                                                            Portugal (+351)</option>
+                                                            Portugal (+351)
+                                                        </option>
                                                     </select>
                                                     {{-- <label for="kt_select_country_code">País</label> --}}
                                                 </div>
+
+                                                <input type="hidden" name="country_code_hidden" id="country_code_hidden"
+                                                    value="+55">
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', function() {
+                                                        const select = $('#kt_select_country_code');
+                                                        const hidden = document.getElementById('country_code_hidden');
+
+                                                        // Atualiza o campo hidden quando o país muda
+                                                        select.on('change', function() {
+                                                            hidden.value = this.value || '+55';
+                                                        });
+
+                                                        // Garante que o hidden pegue o valor inicial também
+                                                        hidden.value = select.val() || '+55';
+                                                    });
+                                                </script>
 
                                                 <input type="text" class="form-control form-control-solid flex-grow-1"
                                                     placeholder="Número do WhatsApp" name="whatsapp_number" />
@@ -412,39 +477,81 @@
 
 
                                         <div class="col-12 col-md-3 fv-row">
-                                            <label class="required fs-5 fw-semibold mb-2">CPF:</label>
-                                            <input id="cpf" type="text" class="form-control form-control-solid"
-                                                placeholder="CPF" name="cpf" inputmode="numeric" maxlength="14" />
+                                            <label class="required fs-5 fw-semibold mb-2">CPF/CNPJ:</label>
+                                            <input id="cpf_cnpj" type="text" class="form-control form-control-solid"
+                                                placeholder="CPF ou CNPJ" name="cpf_cnpj" inputmode="numeric"
+                                                maxlength="18" />
 
                                             <script>
-                                                const cpfInput = document.getElementById('cpf');
+                                                const cpfCnpjInput = document.getElementById('cpf_cnpj');
 
-                                                cpfInput.addEventListener('input', function(e) {
-                                                    // remove tudo que não for dígito e limita a 11 dígitos
-                                                    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+                                                cpfCnpjInput.addEventListener('input', function(e) {
+                                                    let v = e.target.value.replace(/\D/g, '');
 
-                                                    // aplica as quebras: 000.000.000-00
-                                                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-                                                    v = v.replace(/(\d{3})(\d)/, '$1.$2');
-                                                    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                                                    if (v.length <= 11) {
+                                                        // CPF → 000.000.000-00
+                                                        v = v.slice(0, 11)
+                                                            .replace(/(\d{3})(\d)/, '$1.$2')
+                                                            .replace(/(\d{3})(\d)/, '$1.$2')
+                                                            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                                                    } else {
+                                                        // CNPJ → 00.000.000/0000-00
+                                                        v = v.slice(0, 14)
+                                                            .replace(/^(\d{2})(\d)/, '$1.$2')
+                                                            .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                                                            .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                                                            .replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+                                                    }
 
                                                     e.target.value = v;
                                                 });
 
-                                                // se quiser o valor "limpo" (apenas dígitos) antes de enviar:
-                                                function getCpfOnlyDigits() {
-                                                    return cpfInput.value.replace(/\D/g, '');
+                                                // Se precisar do valor limpo antes de enviar:
+                                                function getCpfCnpjDigits() {
+                                                    return cpfCnpjInput.value.replace(/\D/g, '');
                                                 }
                                             </script>
+
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    const cpfInput = document.getElementById('cpf_cnpj');
+                                                    const feedback = document.createElement('div');
+                                                    feedback.classList.add('mt-1', 'small');
+                                                    cpfInput.after(feedback);
+
+                                                    cpfInput.addEventListener('blur', function() {
+                                                        const raw = cpfInput.value.replace(/\D/g, '');
+                                                        if (!raw) return;
+
+                                                        fetch(`/check-cpf-cnpj?cpf_cnpj=${encodeURIComponent(raw)}`)
+                                                            .then(res => res.json())
+                                                            .then(data => {
+                                                                if (data.exists) {
+                                                                    feedback.textContent = '❌ CPF/CNPJ já cadastrado.';
+                                                                    feedback.className = 'text-danger small mt-1';
+                                                                } else {
+                                                                    feedback.textContent = '✅ CPF/CNPJ disponível.';
+                                                                    feedback.className = 'text-success small mt-1';
+                                                                }
+                                                            })
+                                                            .catch(() => {
+                                                                feedback.textContent = 'Erro ao verificar CPF/CNPJ.';
+                                                                feedback.className = 'text-muted small mt-1';
+                                                            });
+                                                    });
+                                                });
+                                            </script>
+
                                         </div>
+
 
                                         <div class="col-md-3 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Gênero:</label>
                                             <select class="form-control form-control-solid" name="gender"
                                                 data-control="select2">
                                                 <option value="-">Selecione</option>
-                                                <option value="masculino">Masculino</option>
-                                                <option value="feminimo">Feminimo</option>
+                                                <option value="Masculino">Masculino</option>
+                                                <option value="Feminimo">Feminimo</option>
                                             </select>
                                         </div>
 
@@ -460,7 +567,18 @@
                                                 placeholder="Digite o CEP" maxlength="9" />
                                         </div>
 
-                                        <div class="col-md-8">
+                                        <div class="col-md-2">
+                                            <label class="form-label required">Tipo:</label>
+                                            <select class="form-control form-control-solid" name="id_type_address"
+                                                data-control="select2" required>
+                                                <option value="">Selecione</option>
+                                                @foreach ($typeAddresses as $type)
+                                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
                                             <label class="form-label required">Rua:</label>
                                             <input type="text" id="street" name="street"
                                                 class="required form-control form-control-solid"

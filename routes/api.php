@@ -17,14 +17,14 @@ Route::middleware(['verify_token'])->group(function () {
 
         // CRIAÇÃO
         Route::get('/create', [UniversalApiController::class, 'create'])->name('create');
-        Route::post('/', [UniversalApiController::class, 'store'])->name('store');
+        Route::post('/store', [UniversalApiController::class, 'store'])->name('store');
 
         // EDIÇÃO / ATUALIZAÇÃO
         Route::get('/edit/{id_module}', [UniversalApiController::class, 'edit'])->name('edit');
-        Route::put('/{id_module}', [UniversalApiController::class, 'update'])->name('update');
+        Route::put('/update/{id_module}', [UniversalApiController::class, 'update'])->name('update');
 
         // EXCLUSÃO / RESTAURAÇÃO
-        Route::delete('/{id_module}', [UniversalApiController::class, 'destroy'])->name('destroy');
+        Route::delete('/destroy/{id_module}', [UniversalApiController::class, 'destroy'])->name('destroy');
         Route::post('/restore/{id_module}', [UniversalApiController::class, 'restore'])->name('restore');
         Route::delete('/force/{id_module}', [UniversalApiController::class, 'destroyForce'])->name('destroy_force');
     });

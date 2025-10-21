@@ -6,19 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Person extends Model
+class TypeAddress extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'tc_person';
+    protected $table = 'tc_type_address';
 
     protected $fillable = [
         'id_credential',
         'name',
-        'whatsapp',
-        'cpf_cnpj',
-        'gender',
-        'birthdate',
         'active',
     ];
 
