@@ -14,12 +14,12 @@ class PersonUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_credential'   => 'required|exists:tc_credential,id',
-            'id_person'       => 'required|exists:tc_person,id',
-            'email'           => 'required|email|max:191|unique:tc_person_user,email,' . $this->id,
-            'password'        => $this->isMethod('post') ? 'required|string|min:6' : 'nullable|string|min:6',
-            'remember_token'  => 'boolean',
-            'active'          => 'boolean',
+            'id_credential' => 'required|exists:tc_credential,id',
+            'id_person' => 'required|exists:tc_person,id',
+            'email' => 'required|email|max:191|unique:tc_person_user,email,' . $this->id,
+            'password' => $this->isMethod('post') ? 'required|string|min:6' : 'nullable|string|min:6',
+            'remember_token' => 'boolean',
+            'active' => 'boolean',
         ];
     }
 
