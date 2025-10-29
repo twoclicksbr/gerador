@@ -132,7 +132,7 @@
                                                     if (period === "annual") {
                                                         const total = annualValue * 12;
                                                         extraTop.innerHTML = `Em até <strong>12x</strong>`;
-                                                        extraBottom.innerHTML = `Total: <strong>R$ ${formatCurrency(total)}</strong>`;
+                                                        extraBottom.innerHTML = `Total: <strong>R$ ${formatCurrency(total)}</strong> por ano.`;
                                                         span.textContent = formatCurrency(annualValue);
                                                         if (periodEl) periodEl.textContent = "/Mês";
                                                     } else {

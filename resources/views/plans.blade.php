@@ -158,7 +158,7 @@
 
                         extra.innerHTML = `
                     <div class="text-gray-800 fw-semibold mt-2">
-                        Total: <strong>R$ ${formatCurrency(total)}</strong>
+                        Total: <strong>R$ ${formatCurrency(total)}</strong> por ano.
                     </div>
                 `;
                     }
