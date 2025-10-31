@@ -15,7 +15,7 @@ class TokenRequest extends FormRequest
     {
         return [
             'id_credential' => 'required|exists:tc_credential,id',
-            'id_person'     => 'required|exists:tc_person,id',
+            'environment'   => 'required|in:production,sandbox',
             'token'         => 'required|string|max:255|unique:tc_token,token,' . $this->id,
             'ip_address'    => 'nullable|string|max:191',
             'device_info'   => 'nullable|string|max:191',
@@ -29,10 +29,12 @@ class TokenRequest extends FormRequest
             'id_credential.required' => 'A credencial é obrigatória.',
             'id_credential.exists'   => 'A credencial informada não existe.',
 
-            'id_person.required'     => 'A pessoa é obrigatória.',
-            'id_person.exists'       => 'A pessoa informada não existe.',
+            'environment.required'   => 'O ambiente é obrigatório.',
+            'environment.in'         => 'O ambiente deve ser production ou sandbox.',
 
             'token.required'         => 'O token é obrigatório.',
+            'token.string'           => 'O token deve ser um texto válido.',
+            'token.max'              => 'O token não pode ter mais que 255 caracteres.',
             'token.unique'           => 'Este token já está em uso.',
 
             'ip_address.max'         => 'O IP não pode ter mais que 191 caracteres.',

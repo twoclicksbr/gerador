@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Funcionalidades - DevsAPI')
+@section('title', 'Registre-se - DevsAPI')
 @section('page-title', 'features')
 
 @section('content')
@@ -11,7 +11,7 @@
                 <div class="page-title d-flex flex-column py-1">
 
                     <h1 class="d-flex align-items-center my-1">
-                        <span class="text-gray-900 fw-bold fs-1">Funcionalidades</span>
+                        <span class="text-gray-900 fw-bold fs-1">Registre-se</span>
                     </h1>
                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-1">
                         <li class="breadcrumb-item text-muted">
@@ -21,7 +21,7 @@
                             <span class="bullet bg-gray-200 w-5px h-2px"></span>
                         </li>
 
-                        <li class="breadcrumb-item text-gray-900">Funcionalidades</li>
+                        <li class="breadcrumb-item text-gray-900">Registre-se</li>
                     </ul>
                 </div>
 
@@ -29,20 +29,15 @@
             <div class="post" id="kt_post">
                 <div class="card">
                     <div class="card-body p-lg-17">
+
+                        @include('layouts.components.banner', [
+                            'title' => 'Registre-se',
+                            'description' => 'Registre-se para começar a usar o DevsAPI e gerar suas APIs de forma simples e rápida.',
+                        ])
+
                         <div class="position-relative mb-17">
                             <div class="overlay overlay-show">
-                                <div class="bgi-no-repeat bgi-position-center bgi-size-cover card-rounded min-h-250px"
-                                    style="background-image:url('assets/media/stock/1600x800/img-1.jpg')"></div>
-                                <div class="overlay-layer rounded bg-black" style="opacity: 0.4"></div>
-                            </div>
-                            <div class="position-absolute text-white mb-8 ms-10 bottom-0">
-                                <h3 class="text-white fs-2qx fw-bold mb-3 m">Careers at KeenThemes</h3>
-                                <div class="fs-5 fw-semibold">You sit down. You stare at your screen. The cursor blinks.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="position-relative mb-17">
-                            <div class="overlay overlay-show">
+
                                 <form action="{{ route('register.store') }}" method="POST" class="form mb-15"
                                     id="">
                                     @csrf
@@ -132,7 +127,8 @@
                                                     if (period === "annual") {
                                                         const total = annualValue * 12;
                                                         extraTop.innerHTML = `Em até <strong>12x</strong>`;
-                                                        extraBottom.innerHTML = `Total: <strong>R$ ${formatCurrency(total)}</strong> por ano.`;
+                                                        extraBottom.innerHTML =
+                                                            `Total: <strong>R$ ${formatCurrency(total)}</strong> por ano.`;
                                                         span.textContent = formatCurrency(annualValue);
                                                         if (periodEl) periodEl.textContent = "/Mês";
                                                     } else {
@@ -178,8 +174,6 @@
                                         });
                                     </script>
 
-
-
                                     <label class="fs-5 fw-semibold mt-10 mb-2">Acesso ao <strong>DevsAPI</strong></label>
                                     <div class="separator mb-8"></div>
                                     <div class="row mb-5 gy-3">
@@ -200,37 +194,52 @@
                                                     const email = emailInput.value.trim();
                                                     if (!email) return;
 
+                                                    // ✅ Verifica formato básico de e-mail
+                                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                                    if (!emailRegex.test(email)) {
+                                                        feedback.textContent = '❌ Formato de e-mail inválido.';
+                                                        feedback.className = 'text-danger small mt-1';
+                                                        emailInput.classList.remove('is-valid');
+                                                        emailInput.classList.add('is-invalid');
+                                                        return;
+                                                    }
+
+                                                    // 🔍 Verifica se já existe no backend
                                                     fetch(`/check-email?email=${encodeURIComponent(email)}`)
                                                         .then(res => res.json())
                                                         .then(data => {
                                                             if (data.exists) {
                                                                 feedback.textContent = '❌ Este e-mail já está cadastrado.';
                                                                 feedback.className = 'text-danger small mt-1';
+                                                                emailInput.classList.remove('is-valid');
+                                                                emailInput.classList.add('is-invalid');
                                                             } else {
                                                                 feedback.textContent = '✅ E-mail disponível.';
                                                                 feedback.className = 'text-success small mt-1';
+                                                                emailInput.classList.remove('is-invalid');
+                                                                emailInput.classList.add('is-valid');
                                                             }
                                                         })
                                                         .catch(() => {
                                                             feedback.textContent = 'Erro ao verificar e-mail.';
                                                             feedback.className = 'text-muted small mt-1';
+                                                            emailInput.classList.remove('is-valid', 'is-invalid');
                                                         });
                                                 });
                                             });
                                         </script>
 
                                         <div class="col-12 col-md-6 fv-row" data-kt-password-meter="true">
+                                            <label class="required fs-5 fw-semibold mb-2">Senha:</label>
                                             <div class="position-relative mb-3">
-                                                <label class="required fs-5 fw-semibold mb-2">Senha:</label>
-                                                <input id="password" class="form-control form-control-solid"
-                                                    type="password" placeholder="Senha" name="password" value="Millena2012@"
-                                                    autocomplete="off" />
-
+                                                <input class="form-control form-control-solid" type="password"
+                                                    placeholder="Password" name="password" autocomplete="off"
+                                                    value="Millena2012@" />
                                                 <span
                                                     class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
                                                     data-kt-password-meter-control="visibility">
-                                                    <i class="ki-duotone ki-eye-slash fs-2"></i>
-                                                    <i class="ki-duotone ki-eye fs-2 d-none"></i>
+                                                    <i class="ki-outline ki-eye-slash fs-2"></i>
+                                                    <i class="ki-outline ki-eye fs-2 d-none"></i>
                                                 </span>
                                             </div>
 
@@ -326,13 +335,20 @@
                                     <label class="fs-5 fw-semibold mt-10 mb-2">Dados Pessoais</label>
                                     <div class="separator mb-8"></div>
                                     <div class="row mb-5 gy-3">
-                                        <div class="col-12 col-md-8 fv-row">
+                                        <div class="col-12 col-md-3 fv-row">
+                                            <label class="required fs-5 fw-semibold mb-2">Nome da Credencial:</label>
+                                            <input type="text" class="form-control form-control-solid"
+                                                placeholder="ex: Nome da Empresa ou Projeto..." name="credential_name"
+                                                required />
+                                        </div>
+
+                                        <div class="col-12 col-md-6 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Nome:</label>
                                             <input type="text" class="form-control form-control-solid"
                                                 placeholder="Nome Completo" name="name" />
                                         </div>
 
-                                        <div class="col-12 col-md-4 fv-row">
+                                        <div class="col-12 col-md-3 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Nascimento:</label>
                                             <input type="date" class="form-control form-control-solid" placeholder=""
                                                 name="birthdate" />

@@ -12,8 +12,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            TcCredentialSeeder::class,
+
             TcPlanSeeder::class,
             TcPlanFeatureSeeder::class,
+
+            TcTypeAddressSeeder::class,
+
+            TcPersonSeeder::class,
+            TcPersonUserSeeder::class,
+            TcPersonPlanSeeder::class,
+            TcAddressSeeder::class,
+            TcTokenSeeder::class,
         ]);
     }
 }

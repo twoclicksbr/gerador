@@ -29,33 +29,17 @@
             <div class="post" id="kt_post">
                 <div class="card">
                     <div class="card-body p-lg-17">
+
                         <div class="mb-18">
                             <div class="mb-10">
-                                <div class="text-center mb-15">
 
-
-                                    <div class="position-relative mb-17">
-                                        <div class="overlay overlay-show">
-                                            <div class="bgi-no-repeat bgi-position-center bgi-size-cover card-rounded min-h-250px"
-                                                style="background-image:url('/assets/media/stock/1600x800/img-1.jpg')">
-                                            </div>
-
-                                            <div class="overlay-layer rounded bg-black" style="opacity: 0.4">
-                                            </div>
-                                        </div>
-
-                                        <div class="position-absolute text-white mb-8 ms-10 bottom-0">
-                                            <h3 class="text-white fs-2qx fw-bold mb-3 m">Careers at KeenThemes</h3>
-
-                                            <div class="fs-5 fw-semibold">
-                                                You sit down. You stare at your screen. The cursor blinks.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @include('layouts.components.banner', [
+                                    'title' => 'Funcionalidades',
+                                    'description' =>
+                                        'Descubra todos os recursos que tornam o DevsAPI a ferramenta mais completa para desenvolvedores.',
+                                ])
 
                             </div>
-
                         </div>
 
                         <div class="d-flex flex-column flex-lg-row">

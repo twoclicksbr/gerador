@@ -14,7 +14,7 @@ class Token extends Model
 
     protected $fillable = [
         'id_credential',
-        'id_person',
+        'environment',
         'token',
         'ip_address',
         'device_info',

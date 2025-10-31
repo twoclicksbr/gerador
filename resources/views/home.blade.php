@@ -13,6 +13,10 @@
                 <!--begin::Page title-->
                 <div class="page-title d-flex flex-column py-1">
                     <!--begin::Title-->
+
+                    <pre>{{ print_r(session()->all(), true) }}</pre>
+
+
                     <h1 class="d-flex align-items-center my-1">
                         <span class="text-gray-900 fw-bold fs-1">All Questions</span>
                         <!--begin::Description-->

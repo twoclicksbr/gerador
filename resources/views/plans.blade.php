@@ -26,6 +26,12 @@
             <div class="post" id="kt_post">
                 <div class="card" id="kt_pricing">
                     <div class="card-body p-lg-17">
+
+                        @include('layouts.components.banner', [
+                            'title' => 'Nossos Planos',
+                            'description' => 'Escolha o plano ideal para o seu projeto e comece a criar módulos e APIs com poucos cliques.',
+                        ])
+
                         <div class="d-flex flex-column">
 
                             {{-- Alternador Mensal / Anual --}}

@@ -9,13 +9,17 @@ use App\Models\Api\Person;
 use App\Models\Api\PersonPlan;
 use App\Models\Api\PersonUser;
 use App\Models\Api\Plan;
+use App\Models\Api\Token;
 use App\Models\Api\TypeAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Termwind\Components\Dd;
-use Throwable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Throwable;
+
+use App\Mail\ConfirmEmail;
+use App\Models\Api\EmailConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -56,13 +60,13 @@ class RegisterController extends Controller
             ]);
 
             // ============================================================
-            // Criação da credencial (usando o nome da pessoa)
+            // Criação da credencial
             // ============================================================
             $credential = Credential::create([
-                'name'            => $request->name,
-                'slug'            => Str::slug($request->name, '-'),
+                'name'            => $request->credential_name,
+                'slug'            => Str::random(24), // 🔒 identificador único
                 'active'          => 1,
-                'dt_limit_access' => now()->addDays(7), // 🔹 período de teste inicial
+                'dt_limit_access' => now()->addDays(7),
             ]);
 
             Log::info('🏷️ Credencial criada', [
@@ -86,11 +90,11 @@ class RegisterController extends Controller
 
             Log::info('👤 Pessoa criada', [
                 'person_id' => $person->id,
-                'name' => $person->name
+                'name'      => $person->name,
             ]);
 
             // ============================================================
-            // Criação do usuário vinculado
+            // Criação do usuário
             // ============================================================
             $user = PersonUser::create([
                 'id_person'     => $person->id,
@@ -102,8 +106,45 @@ class RegisterController extends Controller
 
             Log::info('🔐 Usuário criado', [
                 'user_id' => $user->id,
-                'email' => $user->email
+                'email'   => $user->email,
             ]);
+
+            // ============================================================
+            // Criação dos tokens da credencial (produção e sandbox)
+            // ============================================================
+
+            // Prefixos legíveis
+            $prefixProd = 'secret_';
+            $prefixSandbox = 'public_';
+
+            // Token de produção
+            $tokenProd = Token::create([
+                'id_credential' => $credential->id,
+                'token'         => $prefixProd . Str::random(60),
+                'environment'   => 'production',
+                'ip_address'    => $request->ip(),
+                'device_info'   => $request->header('User-Agent'),
+                'active'        => 1,
+                'dt_expiration' => now()->addHours(24),
+            ]);
+
+            // Token de sandbox
+            $tokenSandbox = Token::create([
+                'id_credential' => $credential->id,
+                'token'         => $prefixSandbox . Str::random(60),
+                'environment'   => 'sandbox',
+                'ip_address'    => $request->ip(),
+                'device_info'   => 'Sandbox environment',
+                'active'        => 1,
+                'dt_expiration' => now()->addDays(90),
+            ]);
+
+            Log::info('🔑 Tokens criados', [
+                'token_prod_value' => $tokenProd->token,
+                'token_sbx_id'     => $tokenSandbox->id,
+                'token_sbx_value'  => $tokenSandbox->token,
+            ]);
+
 
             // ============================================================
             // Criação do endereço
@@ -123,7 +164,7 @@ class RegisterController extends Controller
             ]);
 
             Log::info('🏠 Endereço criado', [
-                'address_id' => $address->id
+                'address_id' => $address->id,
             ]);
 
             // ============================================================
@@ -134,17 +175,28 @@ class RegisterController extends Controller
                 ->first();
 
             if ($plan) {
+                $cycle = $request->selected_period === 'annual' ? 'annual' : 'month';
+                $now   = now();
+
                 $personPlan = PersonPlan::create([
                     'id_credential' => $credential->id,
                     'id_person'     => $person->id,
                     'id_plan'       => $plan->id,
-                    'period'        => $request->selected_period,
+                    'payment_cycle' => $cycle,
+                    'dt_start'      => $now,
+                    'dt_end'        => $cycle === 'annual'
+                        ? $now->copy()->addYear()
+                        : $now->copy()->addMonth(),
                     'active'        => 1,
                 ]);
+
                 Log::info('💳 Plano vinculado', [
-                    'plan_id' => $plan->id,
+                    'plan_id'        => $plan->id,
                     'person_plan_id' => $personPlan->id,
-                    'plan_name' => $plan->name,
+                    'plan_name'      => $plan->name,
+                    'cycle'          => $cycle,
+                    'dt_start'       => $now,
+                    'dt_end'         => $personPlan->dt_end,
                 ]);
             } else {
                 Log::warning('⚠️ Nenhum plano ativo encontrado', [
@@ -152,13 +204,44 @@ class RegisterController extends Controller
                 ]);
             }
 
+            // ============================================================
+            // Envio do e-mail de confirmação
+            // ============================================================
+
+            // Gera token curto de 6 números
+            $verifyToken = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+            // Envia o e-mail
+            Mail::to($request->email)->send(new ConfirmEmail($user, $verifyToken));
+
+            EmailConfirmation::updateOrCreate(
+                ['email' => $request->email],
+                [
+                    'token'        => $verifyToken,
+                    'confirmed'    => false,
+                    'confirmed_at' => null,
+                ]
+            );
+
+            Log::info('📧 E-mail de confirmação enviado', [
+                'to'    => $request->email,
+                'token' => $verifyToken,
+            ]);
+
+            // Confirma todas as informações no banco
             DB::commit();
             Log::info('✅ [RegisterController@store] Cadastro concluído com sucesso', [
                 'person_id' => $person->id,
                 'user_id'   => $user->id,
             ]);
 
-            return redirect()->route('login')->with('success', 'Cadastro realizado com sucesso!');
+            session([
+                'register_name' => $request->name,
+                'register_email' => $request->email,
+            ]);
+
+            // Retorna para página de confirmação de e-mail
+            return redirect()->route('register.confirm');
         } catch (Throwable $e) {
             DB::rollBack();
 
@@ -174,25 +257,6 @@ class RegisterController extends Controller
                 ->withInput();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // =================================================
     // Verificação do campo e-mail
@@ -218,5 +282,52 @@ class RegisterController extends Controller
             ->exists();
 
         return response()->json(['exists' => $exists]);
+    }
+
+
+
+    // =================================================
+    // Exibe tela de Confirmação de E-mail
+    // =================================================
+    public function confirmEmail()
+    {
+        $name  = session('register_name');
+        $email = session('register_email');
+
+        if (!$name || !$email) {
+            return redirect()->route('login')->with('error', 'Por favor, faça login para continuar.');
+        }
+
+        return view('confirm-email', compact('name', 'email'));
+    }
+
+    // =================================================
+    // Confirmação do E-mail
+    // =================================================
+    public function verifyEmail(Request $request)
+    {
+        $email = $request->input('email');
+        $token = collect(range(1, 6))
+            ->map(fn($i) => $request->input("code_$i"))
+            ->implode('');
+
+        $record = EmailConfirmation::where('email', $email)
+            ->where('token', $token)
+            ->first();
+
+        if (!$record) {
+            return back()->withErrors(['token' => 'Código inválido ou expirado.']);
+        }
+
+        $record->update([
+            'confirmed' => true,
+            'confirmed_at' => now(),
+        ]);
+
+        // 🔹 Limpa a sessão usada no registro
+        session()->forget(['register_name', 'register_email']);
+
+        return redirect()->route('login')
+            ->with('success', 'E-mail confirmado com sucesso!');
     }
 }

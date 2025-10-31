@@ -25,4 +25,9 @@ class Person extends Model
     protected $hidden = [
         'id_credential',
     ];
+
+    public function credential()
+    {
+        return $this->belongsTo(Credential::class, 'id_credential');
+    }
 }

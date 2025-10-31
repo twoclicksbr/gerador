@@ -18,4 +18,9 @@ class Credential extends Model
         'dt_limit_access',
         'active',
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'id_plan');
+    }
 }

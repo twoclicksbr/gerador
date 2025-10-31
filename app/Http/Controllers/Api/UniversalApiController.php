@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class UniversalApiController extends Controller
 {
     // ============================================================
-    // PROPRIEDADES BASE 
+    // PROPRIEDADES BASE
     // ============================================================
     protected ?Model $model = null;
     protected ?string $requestClass = null;
@@ -281,7 +281,7 @@ class UniversalApiController extends Controller
                 $field !== 'remember_token' &&
                 empty($data[$field])
             ) {
-                $data[$field] = Str::random(60);
+                $data[$field] = Str::random(24);
             }
 
             // Define remember_token como boolean (false por padrão)
