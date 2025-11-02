@@ -266,34 +266,35 @@
                                                 símbolos e ao
                                                 menos uma letra maiúscula.
                                             </div>
+
+                                            <script>
+                                                const passwordInput = document.getElementById('password');
+                                                const passwordMessage = document.getElementById('passwordMessage');
+                                                const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+                                                const defaultMsg =
+                                                    'Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao menos uma letra maiúscula.';
+
+                                                passwordInput.addEventListener('input', function() {
+                                                    const value = passwordInput.value.trim();
+
+                                                    if (!value) {
+                                                        passwordMessage.textContent = defaultMsg;
+                                                        passwordMessage.className = 'text-muted';
+                                                        return;
+                                                    }
+
+                                                    if (!regex.test(value)) {
+                                                        passwordMessage.textContent = '❌ A senha ainda não atende aos requisitos.';
+                                                        passwordMessage.className = 'text-danger';
+                                                    } else {
+                                                        passwordMessage.textContent = '✅ A senha atende a todos os requisitos.';
+                                                        passwordMessage.className = 'text-success';
+                                                    }
+                                                });
+                                            </script>
                                         </div>
 
-                                        <script>
-                                            const passwordInput = document.getElementById('password');
-                                            const passwordMessage = document.getElementById('passwordMessage');
-                                            const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
-                                            const defaultMsg =
-                                                'Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao menos uma letra maiúscula.';
-
-                                            passwordInput.addEventListener('input', function() {
-                                                const value = passwordInput.value.trim();
-
-                                                if (!value) {
-                                                    passwordMessage.textContent = defaultMsg;
-                                                    passwordMessage.className = 'text-muted';
-                                                    return;
-                                                }
-
-                                                if (!regex.test(value)) {
-                                                    passwordMessage.textContent = '❌ A senha ainda não atende aos requisitos.';
-                                                    passwordMessage.className = 'text-danger';
-                                                } else {
-                                                    passwordMessage.textContent = '✅ A senha atende a todos os requisitos.';
-                                                    passwordMessage.className = 'text-success';
-                                                }
-                                            });
-                                        </script>
 
                                         <div class="col-12 col-md-6 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Confirmar senha:</label>
@@ -304,39 +305,41 @@
                                             <div id="confirmMessage" class="text-muted mt-1">
                                                 Repita a senha.
                                             </div>
+
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    const passwordInput = document.querySelector('input[name="password"]');
+                                                    const confirmInput = document.getElementById('confirm_password');
+                                                    const confirmMessage = document.getElementById('confirmMessage');
+                                                    const defaultMsg = 'Repita a senha.';
+
+                                                    function validateConfirm() {
+                                                        const pass = passwordInput.value.trim();
+                                                        const conf = confirmInput.value.trim();
+
+                                                        if (!conf) {
+                                                            confirmMessage.textContent = defaultMsg;
+                                                            confirmMessage.className = 'text-muted mt-1';
+                                                            return;
+                                                        }
+
+                                                        if (conf !== pass) {
+                                                            confirmMessage.textContent = '❌ As senhas não conferem.';
+                                                            confirmMessage.className = 'text-danger mt-1';
+                                                        } else {
+                                                            confirmMessage.textContent = '✅ As senhas conferem.';
+                                                            confirmMessage.className = 'text-success mt-1';
+                                                        }
+                                                    }
+
+                                                    // verifica sempre que digita em qualquer um dos dois campos
+                                                    confirmInput.addEventListener('input', validateConfirm);
+                                                    passwordInput.addEventListener('input', validateConfirm);
+                                                });
+                                            </script>
                                         </div>
 
-                                        <script>
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                const passwordInput = document.querySelector('input[name="password"]');
-                                                const confirmInput = document.getElementById('confirm_password');
-                                                const confirmMessage = document.getElementById('confirmMessage');
-                                                const defaultMsg = 'Repita a senha.';
 
-                                                function validateConfirm() {
-                                                    const pass = passwordInput.value.trim();
-                                                    const conf = confirmInput.value.trim();
-
-                                                    if (!conf) {
-                                                        confirmMessage.textContent = defaultMsg;
-                                                        confirmMessage.className = 'text-muted mt-1';
-                                                        return;
-                                                    }
-
-                                                    if (conf !== pass) {
-                                                        confirmMessage.textContent = '❌ As senhas não conferem.';
-                                                        confirmMessage.className = 'text-danger mt-1';
-                                                    } else {
-                                                        confirmMessage.textContent = '✅ As senhas conferem.';
-                                                        confirmMessage.className = 'text-success mt-1';
-                                                    }
-                                                }
-
-                                                // verifica sempre que digita em qualquer um dos dois campos
-                                                confirmInput.addEventListener('input', validateConfirm);
-                                                passwordInput.addEventListener('input', validateConfirm);
-                                            });
-                                        </script>
                                     </div>
 
                                     <label class="fs-5 fw-semibold mt-10 mb-2">Dados Pessoais</label>

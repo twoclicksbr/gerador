@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
+use Illuminate\Validation\Rule;
+
 class PersonController extends Controller
 {
     public function index(Request $request, $module)
@@ -35,23 +37,23 @@ class PersonController extends Controller
         return view("admin.$module.create", compact('module', 'credentials', 'typeAddresses'));
     }
 
-    public function store(PersonRequest $request, $module)
+    public function store($request, $module)
     {
-        Log::info('🟢 [PersonController@store] Início do cadastro', ['payload' => $request->validated()]);
+        // ❌ PROBLEMA AQUI: validated() não existe em Request genérico
+        Log::info('🟢 [PersonController@store] Início do cadastro', ['payload' => $request->all()]);
 
         try {
             DB::beginTransaction();
 
-            $validated = $request->validated();
-
-            $person = Person::create([
-                'id_credential' => $validated['id_credential'],
-                'name'          => $validated['name'],
-                'gender'        => $validated['gender'] ?? null,
-                'birthdate'     => $validated['birthdate'] ?? null,
-                'whatsapp'      => $validated['whatsapp'],
-                'cpf_cnpj'      => $validated['cpf_cnpj'],
-                'active'        => $request->has('active') ? 1 : 0,
+            // ✅ Use validate() em vez de validated()
+            $validated = $request->validate([
+                'id_credential' => 'required|exists:tc_credential,id',
+                'name'          => 'required|string|max:191',
+                'whatsapp'      => 'nullable|string|max:20',
+                'cpf_cnpj'      => 'nullable|string|max:20',
+                'gender'        => 'nullable|string|max:20',
+                'birthdate'     => 'nullable|date',
+                'active'        => 'boolean',
             ]);
 
             Log::info('👤 Pessoa criada', [
@@ -102,7 +104,10 @@ class PersonController extends Controller
     public function edit(Request $request, $module, $id)
     {
         $item = Person::withTrashed()
-            ->with(['address' => fn($q) => $q->where('main', 1)])
+            ->with([
+                'address' => fn($q) => $q->where('main', 1),
+                'user'
+            ])
             ->findOrFail($id);
 
         $isTrashed = $item->trashed();
@@ -112,14 +117,23 @@ class PersonController extends Controller
         return view("admin.$module.edit", compact('item', 'module', 'isTrashed', 'credentials', 'typeAddresses'));
     }
 
-    public function update(PersonRequest $request, $module, $id)
+    public function update($request, $module, $id)
     {
         Log::info('🟡 [PersonController@update] Atualização iniciada', ['id' => $id]);
 
         try {
             DB::beginTransaction();
 
-            $validated = $request->validated();
+            // ✅ MUDE AQUI: validated() → validate()
+            $validated = $request->validate([
+                'id_credential' => 'required|exists:tc_credential,id',
+                'name'          => 'required|string|max:191',
+                'whatsapp'      => 'nullable|string|max:20',
+                'cpf_cnpj'      => 'nullable|string|max:20',
+                'gender'        => 'nullable|string|max:20',
+                'birthdate'     => 'nullable|date',
+                'active'        => 'boolean',
+            ]);
 
             $person = Person::findOrFail($id);
             $person->update([
@@ -216,6 +230,119 @@ class PersonController extends Controller
                 'message' => $e->getMessage(),
             ]);
             return back()->withErrors(['error' => 'Erro ao restaurar registro']);
+        }
+    }
+
+
+    public function updateEmail(Request $request, $module, $id)
+    {
+        Log::info('📧 [PersonController@updateEmail] Atualização de e-mail iniciada', ['id' => $id]);
+
+        try {
+            $request->merge(json_decode($request->getContent(), true) ?? []);
+            Log::info('📨 Dados recebidos', $request->all());
+
+            $person = Person::findOrFail($id);
+            $authUser = (object) session()->get('auth_user');
+            $authPerson = (object) session()->get('auth_person');
+            $authCredential = (object) session()->get('auth_credential');
+
+            $isMaster = $authCredential->id == 1;
+
+            // ✅ autorização: dono do perfil ou master
+            if ($authPerson->id !== $person->id && !$isMaster) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Não autorizado. Você só pode atualizar seus próprios dados.'
+                ], 403);
+            }
+
+            $validated = $request->validate([
+                'email' => [
+                    'required',
+                    'email',
+                    Rule::unique('tc_person_user', 'email')->ignore($person->user?->id),
+                ],
+            ]);
+
+            $user = $person->user;
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'Usuário não encontrado'], 404);
+            }
+
+            $user->update(['email' => $validated['email']]);
+
+            Log::info('✅ E-mail atualizado com sucesso', [
+                'person_id' => $person->id,
+                'user_id' => $authUser->id,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'E-mail atualizado com sucesso!']);
+        } catch (Throwable $e) {
+            Log::error('❌ Erro ao atualizar e-mail', [
+                'person_id' => $id,
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
+    public function updatePassword(Request $request, $module, $id)
+    {
+        Log::info('🔑 [PersonController@updatePassword] Atualização de senha iniciada', ['id' => $id]);
+
+        try {
+            $request->merge(json_decode($request->getContent(), true) ?? []);
+            Log::info('📦 Dados recebidos', $request->all());
+
+            $person = Person::findOrFail($id);
+            $authUser = (object) session()->get('auth_user');
+            $authPerson = (object) session()->get('auth_person');
+            $authCredential = (object) session()->get('auth_credential');
+
+            $isMaster = $authCredential->id == 1;
+
+            // ✅ autorização: dono do perfil ou master
+            if ($authPerson->id !== $person->id && !$isMaster) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Não autorizado. Você só pode atualizar sua própria senha.'
+                ], 403);
+            }
+
+            $validated = $request->validate([
+                'password' => [
+                    'required',
+                    'min:8',
+                    'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/',
+                ],
+            ], [
+                'password.required' => 'A senha é obrigatória.',
+                'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
+                'password.regex' => 'A senha deve conter maiúscula, número e símbolo.',
+            ]);
+
+            $user = $person->user;
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'Usuário não encontrado'], 404);
+            }
+
+            $user->update(['password' => bcrypt($validated['password'])]);
+
+            Log::info('✅ Senha atualizada com sucesso', [
+                'person_id' => $person->id,
+                'user_id' => $authUser->id,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Senha atualizada com sucesso!']);
+        } catch (Throwable $e) {
+            Log::error('❌ Erro ao atualizar senha', [
+                'person_id' => $id,
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
     }
 }

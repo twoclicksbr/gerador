@@ -132,3 +132,18 @@ Route::prefix('panel')->middleware(['verify.web'])->group(function () {
         return app($controller)->restore($request, $module, $id);
     })->name('panel.module.restore');
 });
+
+// ========== QUICK UPDATES (AJAX) ==========
+Route::prefix('ajax/update')->group(function () {
+    Route::put('{module}/email/{id}', function (Request $request, $module, $id) {
+        $controller = 'App\\Http\\Controllers\\Front\\' . Str::studly($module) . 'Controller';
+        if (!class_exists($controller)) abort(404);
+        return app($controller)->updateEmail($request, $module, $id);
+    })->name('ajax.update.email');
+
+    Route::put('{module}/password/{id}', function (Request $request, $module, $id) {
+        $controller = 'App\\Http\\Controllers\\Front\\' . Str::studly($module) . 'Controller';
+        if (!class_exists($controller)) abort(404);
+        return app($controller)->updatePassword($request, $module, $id);
+    })->name('ajax.update.password');
+});

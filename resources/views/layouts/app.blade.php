@@ -40,6 +40,8 @@
             }
         }
     </style>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed sidebar-enabled">
