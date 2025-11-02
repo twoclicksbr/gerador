@@ -67,7 +67,12 @@ class LoginController extends Controller
             ],
         ]);
 
-        return redirect()->route('home');
+        // redireciona conforme a credencial
+        if ($user->person->credential->id == 1) {
+            return redirect()->route('admin.overview');
+        }
+
+        return redirect()->route('panel.overview');
     }
 
     public function logout()

@@ -30,4 +30,14 @@ class Person extends Model
     {
         return $this->belongsTo(Credential::class, 'id_credential');
     }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class, 'id_person')->where('main', 1);
+    }
+
+    public function user()
+    {
+        return $this->hasOne(PersonUser::class, 'id_person');
+    }
 }

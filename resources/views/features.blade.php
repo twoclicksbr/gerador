@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Funcionalidades - DevsAPI')
+@section('title', 'Funcionalidades')
 @section('page-title', 'features')
 
 @section('content')
@@ -135,9 +135,11 @@
 
                                     <div class="mb-13">
                                         <div class="mb-15">
-                                            <h4 class="fs-2x text-gray-800 w-bolder mb-6">Funcionalidades do DevsAPI</h4>
+                                            <h4 class="fs-2x text-gray-800 w-bolder mb-6">Funcionalidades do DevsAPI
+                                            </h4>
                                             <p class="fw-semibold fs-4 text-gray-600 mb-2">
-                                                O DevsAPI é uma plataforma que automatiza o desenvolvimento em Laravel,
+                                                O DevsAPI é uma plataforma que automatiza o desenvolvimento em
+                                                Laravel,
                                                 criando módulos completos com poucos cliques.
                                                 Tudo é padronizado, seguro e pronto para personalização.
                                             </p>
@@ -153,9 +155,11 @@
                                             </h3>
                                             <div class="fs-4 text-gray-600 ps-10">
                                                 Defina os campos e relacionamentos, e o DevsAPI faz o resto.
-                                                Em poucos segundos, ele gera todo o backend do seu módulo, pronto para uso
+                                                Em poucos segundos, ele gera todo o backend do seu módulo, pronto
+                                                para uso
                                                 e integrado via endpoint.
-                                                Um painel completo de cadastro e gestão, padronizado e alinhado às melhores
+                                                Um painel completo de cadastro e gestão, padronizado e alinhado às
+                                                melhores
                                                 práticas.
                                             </div>
                                             <div class="separator separator-dashed my-6"></div>
@@ -169,7 +173,8 @@
                                                 </a>
                                             </h3>
                                             <div class="fs-4 text-gray-600 ps-10">
-                                                Cada módulo já vem com endpoints prontos, autenticação por token, filtros e
+                                                Cada módulo já vem com endpoints prontos, autenticação por token,
+                                                filtros e
                                                 paginação.
                                                 Ideal para integrar com sites, aplicativos ou outros sistemas sem
                                                 complicação.
@@ -185,9 +190,11 @@
                                                 </a>
                                             </h3>
                                             <div class="fs-4 text-gray-600 ps-10">
-                                                O <strong>DevsAPI</strong> permite definir e aplicar permissões diretamente
+                                                O <strong>DevsAPI</strong> permite definir e aplicar permissões
+                                                diretamente
                                                 no front-end,
-                                                integradas ao login e aos tokens de acesso. Flexível, leve e pronta para
+                                                integradas ao login e aos tokens de acesso. Flexível, leve e pronta
+                                                para
                                                 expansão no backend.
                                             </div>
                                             <div class="separator separator-dashed my-6"></div>
@@ -201,11 +208,14 @@
                                                 </a>
                                             </h3>
                                             <div class="fs-4 text-gray-600 ps-10">
-                                                O ambiente client/ é totalmente protegido por autenticação baseada em
+                                                O ambiente client/ é totalmente protegido por autenticação baseada
+                                                em
                                                 tokens.
-                                                Cada requisição exige um token de credencial e o slug do projeto, garantindo
+                                                Cada requisição exige um token de credencial e o slug do projeto,
+                                                garantindo
                                                 que apenas sistemas autorizados acessem os endpoints gerados.
-                                                Segurança e isolamento total entre credenciais, projetos e ambientes.
+                                                Segurança e isolamento total entre credenciais, projetos e
+                                                ambientes.
                                             </div>
                                             <div class="separator separator-dashed my-6"></div>
                                         </div>
@@ -219,7 +229,8 @@
                                             </h3>
                                             <div class="fs-4 text-gray-600 ps-10">
                                                 Conecte-se ao Google Calendar, Meet e Drive direto pelo DevsAPI.
-                                                Crie reuniões automáticas, sincronize eventos e mantenha tudo em um só
+                                                Crie reuniões automáticas, sincronize eventos e mantenha tudo em um
+                                                só
                                                 lugar, sem precisar sair do seu sistema.
                                             </div>
                                         </div>
@@ -229,12 +240,16 @@
 
                                 <!-- 🚀 Criação Automática de Módulos -->
                                 <div class="tab-pane fade mb-20" id="tab-modulos" role="tabpanel">
-                                    <h3 class="fs-2x text-gray-800 fw-bold mb-4">🚀 Criação Automática de Módulos</h3>
+                                    <h3 class="fs-2x text-gray-800 fw-bold mb-4">🚀 Criação Automática de Módulos
+                                    </h3>
                                     <p class="fs-4 text-gray-600">
-                                        O <strong>DevsAPI</strong> transforma a criação de módulos em um processo rápido,
+                                        O <strong>DevsAPI</strong> transforma a criação de módulos em um processo
+                                        rápido,
                                         padronizado e totalmente automatizado.
-                                        Você define os campos, tipos de dados, validações e relacionamentos — por exemplo,
-                                        um módulo <em>“Aluno”</em> com campos como nome, e-mail e telefone, vinculado ao
+                                        Você define os campos, tipos de dados, validações e relacionamentos — por
+                                        exemplo,
+                                        um módulo <em>“Aluno”</em> com campos como nome, e-mail e telefone,
+                                        vinculado ao
                                         módulo <em>“Turma”</em> —
                                         e o sistema cuida de todo o restante.
 
@@ -244,23 +259,28 @@
                                         • <strong>Migration</strong> completa com todos os campos e relacionamentos
                                         configurados;<br>
                                         • <strong>Model</strong> com <code>fillable</code> dinâmico e métodos de
-                                        relacionamento (<code>hasOne</code>, <code>belongsTo</code>, <code>hasMany</code>,
+                                        relacionamento (<code>hasOne</code>, <code>belongsTo</code>,
+                                        <code>hasMany</code>,
                                         etc.);<br>
                                         • <strong>Request</strong> com regras de validação automáticas e mensagens
                                         personalizadas;<br>
                                         • <strong>Controller</strong> REST com rotas prontas (<code>index</code>,
-                                        <code>store</code>, <code>update</code>, <code>destroy</code>, <code>restore</code>
+                                        <code>store</code>, <code>update</code>, <code>destroy</code>,
+                                        <code>restore</code>
                                         e <code>delete</code>);<br>
-                                        • <strong>Menu</strong> e <strong>permissões</strong> configuráveis para acesso
+                                        • <strong>Menu</strong> e <strong>permissões</strong> configuráveis para
+                                        acesso
                                         rápido e organizado.<br><br>
 
-                                        Além disso, cada módulo segue o mesmo padrão estrutural do Laravel 11+, mantendo
+                                        Além disso, cada módulo segue o mesmo padrão estrutural do Laravel 11+,
+                                        mantendo
                                         consistência entre a API, o Front e o Banco de Dados.
                                         Tudo é gerado a partir de arquivos <code>.stub</code> dinâmicos, permitindo
                                         personalização e reuso sem duplicar código.
 
                                         <br><br>
-                                        Em poucos segundos, você tem um módulo completo, funcional e escalável — pronto para
+                                        Em poucos segundos, você tem um módulo completo, funcional e escalável —
+                                        pronto para
                                         rodar em produção no seu front-end.
                                     </p>
                                 </div>
@@ -270,7 +290,8 @@
                                 <div class="tab-pane fade mb-20" id="tab-api" role="tabpanel">
                                     <h3 class="fs-2x text-gray-800 fw-bold mb-4">🔗 API Padrão REST Integrada</h3>
                                     <p class="fs-4 text-gray-600">
-                                        Cada módulo criado no <strong>DevsAPI</strong> já vem com uma <strong>API funcional,
+                                        Cada módulo criado no <strong>DevsAPI</strong> já vem com uma <strong>API
+                                            funcional,
                                             segura e documentada</strong>.
                                         Todos os endpoints são gerados automaticamente e prontos para integração com
                                         qualquer aplicação,
@@ -278,24 +299,31 @@
 
                                         <br><br>
                                         Exemplo:<br>
-                                        Ao criar o módulo <em>“Aluno”</em>, o DevsAPI gera automaticamente endpoints como:
+                                        Ao criar o módulo <em>“Aluno”</em>, o DevsAPI gera automaticamente endpoints
+                                        como:
                                         <br><br>
-                                        • <strong>GET</strong> /api/<code>{client}</code>/aluno — lista registros com
+                                        • <strong>GET</strong> /api/<code>{client}</code>/aluno — lista registros
+                                        com
                                         paginação e filtros;<br>
                                         • <strong>POST</strong> /api/<code>{client}</code>/aluno — cria um novo
                                         registro;<br>
-                                        • <strong>PUT</strong> /api/<code>{client}</code>/aluno/{id} — atualiza dados
+                                        • <strong>PUT</strong> /api/<code>{client}</code>/aluno/{id} — atualiza
+                                        dados
                                         existentes;<br>
-                                        • <strong>DELETE</strong> /api/<code>{client}</code>/aluno/{id} — realiza exclusão
+                                        • <strong>DELETE</strong> /api/<code>{client}</code>/aluno/{id} — realiza
+                                        exclusão
                                         lógica (soft
                                         delete);<br>
-                                        • <strong>PATCH</strong> /api/<code>{client}</code>/aluno/{id}/restore — restaura
+                                        • <strong>PATCH</strong> /api/<code>{client}</code>/aluno/{id}/restore —
+                                        restaura
                                         registros
                                         removidos.<br><br>
 
-                                        Todos os endpoints incluem <strong>autenticação via token</strong> e suporte a
+                                        Todos os endpoints incluem <strong>autenticação via token</strong> e suporte
+                                        a
                                         <strong>filtros dinâmicos</strong>
-                                        (<code>?nome=João&amp;active=1</code>), oferecendo flexibilidade total para consumo
+                                        (<code>?nome=João&amp;active=1</code>), oferecendo flexibilidade total para
+                                        consumo
                                         em qualquer front-end,
                                         aplicativo mobile ou integração externa.
                                     </p>
@@ -303,15 +331,19 @@
 
                                 <!-- 🛡️ Sistema de Permissões Inteligente -->
                                 <div class="tab-pane fade mb-20" id="tab-permissoes" role="tabpanel">
-                                    <h3 class="fs-2x text-gray-800 fw-bold mb-4">🛡️ Sistema de Permissões Inteligente</h3>
+                                    <h3 class="fs-2x text-gray-800 fw-bold mb-4">🛡️ Sistema de Permissões
+                                        Inteligente</h3>
                                     <p class="fs-4 text-gray-600">
-                                        O <strong>DevsAPI</strong> foi projetado para oferecer flexibilidade total no
+                                        O <strong>DevsAPI</strong> foi projetado para oferecer flexibilidade total
+                                        no
                                         controle de acesso,
-                                        permitindo que cada projeto defina suas próprias regras de permissão sem depender de
+                                        permitindo que cada projeto defina suas próprias regras de permissão sem
+                                        depender de
                                         camadas fixas do backend.
                                         As permissões podem ser aplicadas diretamente no <strong>front-end</strong>,
                                         integradas ao sistema de login
-                                        ou conectadas a provedores externos de autenticação (como OAuth, JWT, ou Google
+                                        ou conectadas a provedores externos de autenticação (como OAuth, JWT, ou
+                                        Google
                                         Workspace).
 
                                         <br><br>
@@ -330,7 +362,8 @@
                                         • Estrutura preparada para futura expansão no backend com cache e logs de
                                         permissão.<br><br>
 
-                                        Com o <strong>DevsAPI</strong>, o controle de acesso é simples, transparente e
+                                        Com o <strong>DevsAPI</strong>, o controle de acesso é simples, transparente
+                                        e
                                         moldado às necessidades de cada projeto —
                                         unindo liberdade de desenvolvimento e segurança em um único fluxo.
                                     </p>
@@ -341,15 +374,19 @@
                                 <div class="tab-pane fade mb-20" id="tab-autenticacao" role="tabpanel">
                                     <h3 class="fs-2x text-gray-800 fw-bold mb-4">🔐 Autenticação Segura</h3>
                                     <p class="fs-4 text-gray-600">
-                                        O ambiente <strong>client/</strong> é protegido por um sistema de autenticação
+                                        O ambiente <strong>client/</strong> é protegido por um sistema de
+                                        autenticação
                                         baseado em <strong>tokens</strong>,
-                                        garantindo que apenas credenciais e projetos autorizados acessem os endpoints
+                                        garantindo que apenas credenciais e projetos autorizados acessem os
+                                        endpoints
                                         gerados pelo DevsAPI.
-                                        Essa camada de segurança assegura isolamento total entre clientes, ambientes e
+                                        Essa camada de segurança assegura isolamento total entre clientes, ambientes
+                                        e
                                         tokens utilizados.
 
                                         <br><br>
-                                        Cada requisição deve conter o <strong>token da credencial</strong> e o <strong>slug
+                                        Cada requisição deve conter o <strong>token da credencial</strong> e o
+                                        <strong>slug
                                             do projeto</strong>
                                         no cabeçalho (<em>header</em>), permitindo a validação completa da origem da
                                         chamada:
@@ -365,7 +402,8 @@
                                         • Rastreamento completo de cada requisição;<br>
                                         • Compatível com API REST e integrações externas.<br><br>
 
-                                        Segurança, controle e rastreabilidade integradas de forma simples e transparente ao
+                                        Segurança, controle e rastreabilidade integradas de forma simples e
+                                        transparente ao
                                         seu fluxo de desenvolvimento.
                                     </p>
                                 </div>
@@ -379,32 +417,41 @@
                                         permitindo que seus módulos interajam de forma automática e inteligente com
                                         ferramentas como
                                         <strong>Calendar</strong>, <strong>Meet</strong> e <strong>Drive</strong>.
-                                        Essa integração facilita o agendamento de eventos, o compartilhamento de arquivos e
+                                        Essa integração facilita o agendamento de eventos, o compartilhamento de
+                                        arquivos e
                                         a sincronização de informações
                                         sem a necessidade de qualquer configuração manual.
 
                                         <br><br>
-                                        Com poucos cliques, o DevsAPI é capaz de criar conexões seguras e dinâmicas entre o
+                                        Com poucos cliques, o DevsAPI é capaz de criar conexões seguras e dinâmicas
+                                        entre o
                                         seu sistema e o ecossistema Google,
                                         automatizando processos que antes exigiam integrações complexas.
-                                        Tudo é feito por meio de tokens validados e APIs oficiais, garantindo conformidade e
+                                        Tudo é feito por meio de tokens validados e APIs oficiais, garantindo
+                                        conformidade e
                                         total rastreabilidade de cada operação.
 
                                         <br><br>
                                         Exemplo de uso:<br>
-                                        • Criar automaticamente uma reunião no <strong>Google Meet</strong> ao registrar um
+                                        • Criar automaticamente uma reunião no <strong>Google Meet</strong> ao
+                                        registrar um
                                         evento ou agendamento;<br>
-                                        • Enviar e organizar arquivos de relatórios, atas ou documentos no <strong>Google
+                                        • Enviar e organizar arquivos de relatórios, atas ou documentos no
+                                        <strong>Google
                                             Drive</strong> do projeto;<br>
-                                        • Sincronizar compromissos e lembretes no <strong>Google Calendar</strong> da
+                                        • Sincronizar compromissos e lembretes no <strong>Google Calendar</strong>
+                                        da
                                         organização;<br>
                                         • Compartilhar pastas, links e gravações de reuniões com os usuários
                                         autorizados;<br>
-                                        • Centralizar notificações e atualizações em um único ambiente conectado.<br><br>
+                                        • Centralizar notificações e atualizações em um único ambiente
+                                        conectado.<br><br>
 
-                                        Com o <strong>DevsAPI</strong>, a integração com os serviços do Google deixa de ser
+                                        Com o <strong>DevsAPI</strong>, a integração com os serviços do Google deixa
+                                        de ser
                                         um desafio técnico e se torna
-                                        uma extensão natural do seu sistema — simples, segura e totalmente automatizada.
+                                        uma extensão natural do seu sistema — simples, segura e totalmente
+                                        automatizada.
                                     </p>
                                 </div>
 

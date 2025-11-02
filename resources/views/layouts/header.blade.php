@@ -2182,17 +2182,19 @@
                             </a>
                         </div>
 
-                        <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                            data-kt-menu-placement="bottom-start"
-                            class="menu-item @if (Request::is('register*')) here show @endif  me-0 me-lg-2">
-                            <a href="{{ route('register') }}" class="menu-link py-3">
-                                <span class="menu-icon">
-                                    <i class="ki-solid ki-address-book fs-2"></i>
-                                </span>
-                                <span class="menu-title">Registre-se</span>
-                                <span class="menu-arrow d-lg-none"></span>
-                            </a>
-                        </div>
+                        @if (! session('auth_user'))
+                            <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                                data-kt-menu-placement="bottom-start"
+                                class="menu-item @if (Request::is('register*')) here show @endif  me-0 me-lg-2">
+                                <a href="{{ route('register') }}" class="menu-link py-3">
+                                    <span class="menu-icon">
+                                        <i class="ki-solid ki-address-book fs-2"></i>
+                                    </span>
+                                    <span class="menu-title">Registre-se</span>
+                                    <span class="menu-arrow d-lg-none"></span>
+                                </a>
+                            </div>
+                        @endif
 
 
 

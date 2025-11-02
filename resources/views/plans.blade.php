@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Planos - DevsAPI')
+@section('title', 'Planos')
 @section('page-title', 'plans')
 
 @section('content')
+
     <div class="wrapper d-flex flex-column flex-row-fluid mt-5 mt-lg-10" id="kt_wrapper">
         <div class="content flex-column-fluid" id="kt_content">
             <div class="toolbar d-flex flex-stack flex-wrap mb-5 mb-lg-7" id="kt_toolbar">
@@ -29,7 +30,8 @@
 
                         @include('layouts.components.banner', [
                             'title' => 'Nossos Planos',
-                            'description' => 'Escolha o plano ideal para o seu projeto e comece a criar módulos e APIs com poucos cliques.',
+                            'description' =>
+                                'Escolha o plano ideal para o seu projeto e comece a criar módulos e APIs com poucos cliques.',
                         ])
 
                         <div class="d-flex flex-column">
@@ -50,7 +52,8 @@
                                             <div
                                                 class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10">
                                                 <div class="mb-7 text-center">
-                                                    <h1 class="text-gray-900 mb-5 fw-bolder">{{ $plan->name }}</h1>
+                                                    <h1 class="text-gray-900 mb-5 fw-bolder">{{ $plan->name }}
+                                                    </h1>
 
                                                     <div class="text-center">
                                                         <span class="mb-2 text-primary">R$</span>
@@ -204,5 +207,6 @@
             setTimeout(updateTotals, 300);
         });
     </script>
+
 
 @endsection

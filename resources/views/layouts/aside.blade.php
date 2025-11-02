@@ -4,182 +4,99 @@
     data-kt-drawer-toggle="#kt_aside_toggle" data-kt-sticky="true" data-kt-sticky-name="aside-sticky"
     data-kt-sticky-offset="{default: false, lg: '1px'}" data-kt-sticky-width="{lg: '225px'}" data-kt-sticky-left="auto"
     data-kt-sticky-top="94px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
-    <!--begin::Aside nav-->
+
     <div class="hover-scroll-overlay-y my-5 my-lg-5 w-100 ps-4 ps-lg-0 pe-4 me-1" id="kt_aside_menu_wrapper"
-        data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
-        data-kt-scroll-dependencies="#kt_header" data-kt-scroll-wrappers="#kt_aside" data-kt-scroll-offset="5px">
-        <!--begin::Menu-->
+        style="max-height: 90vh; overflow-y: auto;" data-kt-scroll="true"
+        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-dependencies="#kt_header"
+        data-kt-scroll-wrappers="#kt_aside" data-kt-scroll-offset="5px">
+
         <div class="menu menu-column menu-active-bg menu-hover-bg menu-title-gray-700 fs-6 menu-rounded w-100"
             id="#kt_aside_menu" data-kt-menu="true">
-            <!--begin::Heading-->
-            <div class="menu-item">
-                <div class="menu-content pb-2">
-                    <span class="menu-section text-muted text-uppercase fs-7 fw-bold">Public</span>
+
+            @if (session('auth_credential.id') == 1)
+                <div class="mb-5">
+                    <div class="menu-item">
+                        <div class="menu-content pb-2">
+                            <span class="menu-section text-muted text-uppercase fs-7 fw-bold">Administração</span>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <a href="{{ route('admin.overview') }}"
+                            class="menu-link {{ request()->routeIs('admin.overview') ? 'active' : '' }}">
+                            <span class="menu-title">Visão Geral</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
+                        <a href="{{ route('admin.module.index', ['module' => 'credential']) }}"
+                            class="menu-link {{ request()->is('admin/credential*') ? 'active' : '' }}">
+                            <span class="menu-title">Credenciais</span>
+                            <span class="badge badge-light-primary">
+                                {{ number_format(\App\Models\Api\Credential::count(), 0, ',', '.') }}
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
+                        <a href="{{ route('admin.module.index', ['module' => 'person']) }}"
+                            class="menu-link {{ request()->is('admin/person*') ? 'active' : '' }}">
+                            <span class="menu-title">Pessoas</span>
+                            <span class="badge badge-light-primary">
+                                {{ number_format(\App\Models\Api\Person::count(), 0, ',', '.') }}
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
+                        <a href="" class="menu-link">
+                            <span class="menu-title">Tags</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a href="" class="menu-link">
+                            <span class="menu-title">Ask Question</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <!--end::Heading-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link active">
-                    <span class="menu-title">All Questions</span>
-                    <span class="menu-badge">6,234</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="apps/devs/search.html" class="menu-link">
-                    <span class="menu-title">Search</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="apps/devs/tag.html" class="menu-link">
-                    <span class="menu-title">Tags</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="apps/devs/ask.html" class="menu-link">
-                    <span class="menu-title">Ask Question</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Heading-->
-            <div class="menu-item pt-5">
-                <div class="menu-content pb-2">
-                    <span class="menu-section text-muted text-uppercase fs-7 fw-bold">My
-                        Activity</span>
-                </div>
-            </div>
-            <!--end::Heading-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="apps/devs/question.html" class="menu-link">
-                    <span class="menu-title">My Questions</span>
-                    <span class="menu-badge">24</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Resolved</span>
-                    <span class="menu-badge">120</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Enrolled</span>
-                    <span class="menu-badge">10</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Saved</span>
-                    <span class="menu-badge">6</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Heading-->
-            <div class="menu-item pt-5">
-                <div class="menu-content pb-2">
-                    <span class="menu-section text-muted text-uppercase fs-7 fw-bold">Categories</span>
-                </div>
-            </div>
-            <!--end::Heading-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Metronic Admin</span>
-                    <span class="menu-badge">1,400</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Backend Integration</span>
-                    <span class="menu-badge">235</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Suggestions</span>
-                    <span class="menu-badge">25</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Pre-sale Questions</span>
-                    <span class="menu-badge">145</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Menu item-->
-            <div class="menu-item">
-                <a href="index.html" class="menu-link">
-                    <span class="menu-title">Laravel Starter Kit</span>
-                    <span class="menu-badge">750</span>
-                </a>
-            </div>
-            <!--end::Menu item-->
-            <!--begin::Collapse-->
-            <div class="collapse" id="kt_aside_categories_more">
-                <!--begin::Menu item-->
+            @endif
+
+
+
+            <div class="mb-5">
                 <div class="menu-item">
-                    <a href="index.html" class="menu-link">
-                        <span class="menu-title">Blazor Integration</span>
-                        <span class="menu-badge">100</span>
+                    <div class="menu-content pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-7 fw-bold">Public</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <a href="{{ route('panel.overview') }}"
+                        class="menu-link {{ request()->routeIs('panel.overview') ? 'active' : '' }}">
+                        <span class="menu-title">Visão Geral</span>
                     </a>
                 </div>
-                <!--end::Menu item-->
-                <!--begin::Menu item-->
                 <div class="menu-item">
-                    <a href="index.html" class="menu-link">
-                        <span class="menu-title">Django Dashboard</span>
-                        <span class="menu-badge">90</span>
+                    <a href="apps/devs/search.html" class="menu-link">
+                        <span class="menu-title">Search</span>
                     </a>
                 </div>
-                <!--end::Menu item-->
-                <!--begin::Menu item-->
                 <div class="menu-item">
-                    <a href="index.html" class="menu-link">
-                        <span class="menu-title">Rails CRUD</span>
-                        <span class="menu-badge">14</span>
+                    <a href="apps/devs/tag.html" class="menu-link">
+                        <span class="menu-title">Tags</span>
                     </a>
                 </div>
-                <!--end::Menu item-->
-                <!--begin::Menu item-->
                 <div class="menu-item">
-                    <a href="index.html" class="menu-link">
-                        <span class="menu-title">.NET Starter Kit</span>
-                        <span class="menu-badge">30</span>
+                    <a href="apps/devs/ask.html" class="menu-link">
+                        <span class="menu-title">Ask Question</span>
                     </a>
                 </div>
-                <!--end::Menu item-->
             </div>
-            <!--end::Collapse-->
-            <!--begin::Heading-->
+
             <div class="menu-item">
                 <div class="menu-link">
                     <a hred="#" class="menu-title text-muted fs-7" id="kt_aside_categories_toggle"
                         data-bs-toggle="collapse" data-bs-target="#kt_aside_categories_more">More Categories</a>
                 </div>
             </div>
-            <!--end::Heading-->
         </div>
-        <!--end::Menu-->
     </div>
-    <!--end::Aside nav-->
 </div>

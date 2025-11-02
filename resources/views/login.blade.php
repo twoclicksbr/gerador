@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login - DevsAPI')
+@section('title', 'Login')
 @section('page-title', 'login')
 
 @section('content')
@@ -17,7 +17,8 @@
 
                                 <div class="text-center mb-11">
                                     <h1 class="text-gray-900 fw-bolder mb-3">Acesse sua conta</h1>
-                                    <div class="text-gray-500 fw-semibold fs-6">Entre para continuar usando o DevsAPI</div>
+                                    <div class="text-gray-500 fw-semibold fs-6">Entre para continuar usando o
+                                        DevsAPI</div>
                                 </div>
 
                                 @if ($errors->any())
@@ -28,7 +29,7 @@
 
                                 <div class="fv-row mb-8">
                                     <input type="email" placeholder="E-mail" name="email" required autocomplete="off"
-                                        class="form-control bg-transparent" value="alexalvesdealmeida@gmail.com" autofocus />
+                                        class="form-control bg-transparent" value="alex@twoclicks.com.br" autofocus />
                                 </div>
 
                                 <div class="fv-row mb-3">
@@ -62,6 +63,5 @@
             </div>
         </div>
     </div>
-
 
 @endsection

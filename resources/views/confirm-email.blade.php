@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Confirmação de E-mail - DevsAPI')
-@section('page-title', 'features')
+@section('title', 'Confirmação de E-mail')
+@section('page-title', 'confirm-email')
 
 @section('content')
 

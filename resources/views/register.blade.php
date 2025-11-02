@@ -1,6 +1,10 @@
+@php
+    $disabled = $disabled ?? ''; // evita erro se a variável não existir
+@endphp
+
 @extends('layouts.app')
 
-@section('title', 'Registre-se - DevsAPI')
+@section('title', 'Registre-se')
 @section('page-title', 'features')
 
 @section('content')
@@ -32,7 +36,8 @@
 
                         @include('layouts.components.banner', [
                             'title' => 'Registre-se',
-                            'description' => 'Registre-se para começar a usar o DevsAPI e gerar suas APIs de forma simples e rápida.',
+                            'description' =>
+                                'Registre-se para começar a usar o DevsAPI e gerar suas APIs de forma simples e rápida.',
                         ])
 
                         <div class="position-relative mb-17">
@@ -174,7 +179,8 @@
                                         });
                                     </script>
 
-                                    <label class="fs-5 fw-semibold mt-10 mb-2">Acesso ao <strong>DevsAPI</strong></label>
+                                    <label class="fs-5 fw-semibold mt-10 mb-2">Acesso ao
+                                        <strong>DevsAPI</strong></label>
                                     <div class="separator mb-8"></div>
                                     <div class="row mb-5 gy-3">
                                         <div class="col-12 col-md-12 fv-row">
@@ -256,7 +262,8 @@
                                             </div>
 
                                             <div id="passwordMessage" class="text-muted">
-                                                Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao
+                                                Use 8 ou mais caracteres com uma mistura de letras, números,
+                                                símbolos e ao
                                                 menos uma letra maiúscula.
                                             </div>
                                         </div>
@@ -336,7 +343,8 @@
                                     <div class="separator mb-8"></div>
                                     <div class="row mb-5 gy-3">
                                         <div class="col-12 col-md-3 fv-row">
-                                            <label class="required fs-5 fw-semibold mb-2">Nome da Credencial:</label>
+                                            <label class="required fs-5 fw-semibold mb-2">Nome da
+                                                Credencial:</label>
                                             <input type="text" class="form-control form-control-solid"
                                                 placeholder="ex: Nome da Empresa ou Projeto..." name="credential_name"
                                                 required />
@@ -563,13 +571,21 @@
 
                                         <div class="col-md-3 fv-row">
                                             <label class="required fs-5 fw-semibold mb-2">Gênero:</label>
-                                            <select class="form-control form-control-solid" name="gender"
-                                                data-control="select2">
-                                                <option value="-">Selecione</option>
-                                                <option value="Masculino">Masculino</option>
-                                                <option value="Feminimo">Feminimo</option>
+                                            <select class="form-select form-select-solid" name="gender"
+                                                data-control="select2" {{ $disabled }}>
+                                                <option value="">Selecione</option>
+                                                <option value="Masculino"
+                                                    {{ old('gender', $item->gender ?? '') == 'Masculino' ? 'selected' : '' }}>
+                                                    Masculino</option>
+                                                <option value="Feminino"
+                                                    {{ old('gender', $item->gender ?? '') == 'Feminino' ? 'selected' : '' }}>
+                                                    Feminino</option>
+                                                <option value="Outro"
+                                                    {{ old('gender', $item->gender ?? '') == 'Outro' ? 'selected' : '' }}>
+                                                    Outro</option>
                                             </select>
                                         </div>
+
 
                                     </div>
 
@@ -589,7 +605,8 @@
                                                 data-control="select2" required>
                                                 <option value="">Selecione</option>
                                                 @foreach ($typeAddresses as $type)
-                                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                    <option value="{{ $type->id }}">{{ $type->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>

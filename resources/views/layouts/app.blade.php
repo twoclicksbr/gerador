@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-    <title>@yield('title', 'DevsAPI')</title>
+    <title>@yield('title', 'DevsAPI') - DevsAPI - TwoClicks</title>
     <meta charset="utf-8" />
     <meta name="description"
         content="The most advanced Bootstrap 5 Admin Theme with 40 unique prebuilt layouts on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Rails, Spring, Blazor, Django, Express.js, Node.js, Flask, Symfony & Laravel versions. Grab your copy now and get life-time updates for free." />
@@ -20,8 +20,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
     <!--begin::Vendor Stylesheets(used for this page only)-->
-    <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
     <!--end::Vendor Stylesheets-->
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -30,9 +32,17 @@
     <script>
         // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking) if (window.top != window.self) { window.top.location.replace(window.self.location.href); }
     </script>
+
+    <style>
+        @media (min-width: 992px) {
+            #kt_aside_menu_wrapper {
+                max-height: 70vh !important;
+            }
+        }
+    </style>
 </head>
 
-<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-enabled sidebar-enabled">
+<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-enabled aside-fixed sidebar-enabled">
 
     <script>
         var defaultThemeMode = "light";
@@ -65,9 +75,20 @@
                     @include('layouts.aside')
                 @endif
 
-                @yield('content')
+                <div class="hover-scroll-overlay-y my-5 my-lg-5 w-100 ps-4 ps-lg-0 pe-4 me-1" id="kt_aside_menu_wrapper"
+                    style="max-height: 65vh; overflow-y: auto;" data-kt-scroll="true"
+                    data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-dependencies="#kt_header"
+                    data-kt-scroll-wrappers="#kt_aside" data-kt-scroll-offset="5px">
 
-                @if (in_array(Route::currentRouteName(), ['home']))
+                    {{-- <div class="menu menu-column menu-active-bg menu-hover-bg menu-title-gray-700 fs-6 menu-rounded w-100"
+                        id="#kt_aside_menu" data-kt-menu="true"> --}}
+
+                        @yield('content')
+
+                    {{-- </div> --}}
+                </div>
+
+                @if (in_array(Route::currentRouteName(), ['']))
                     @include('layouts.sidebar')
                 @endif
 

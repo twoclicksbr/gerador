@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\VerifyToken;
+use App\Http\Middleware\VerifyWeb;
+use App\Http\Middleware\OnlyMasterFront;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,7 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+        'verify.web' => VerifyWeb::class,
             'verify_token' => VerifyToken::class,
+        'only.master.front' => OnlyMasterFront::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

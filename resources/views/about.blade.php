@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sobre nós - DevsAPI')
+@section('title', 'Sobre nós')
 @section('page-title', 'about')
 
 @section('content')
@@ -43,7 +43,8 @@
                                         alt="" />
                                     <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
                                         <a href="{{ route('plans') }}" class="btn btn-primary">Planos</a>
-                                        <a href="{{ route('register') }}" class="btn btn-light-primary ms-3">Criar Conta</a>
+                                        <a href="{{ route('register') }}" class="btn btn-light-primary ms-3">Criar
+                                            Conta</a>
                                     </div>
                                 </div>
                             </div>
@@ -52,20 +53,25 @@
                                     O DevsAPI nasceu para simplificar o desenvolvimento e dar poder às ideias.
                                 </p>
                                 <p class="mb-8">
-                                    Criamos uma plataforma que transforma a forma como sistemas são construídos — reduzindo
+                                    Criamos uma plataforma que transforma a forma como sistemas são construídos —
+                                    reduzindo
                                     semanas de trabalho a poucos minutos.
                                 </p>
                                 <p class="mb-8">
-                                    Nosso objetivo é libertar o desenvolvedor da repetição e entregar uma experiência
+                                    Nosso objetivo é libertar o desenvolvedor da repetição e entregar uma
+                                    experiência
                                     fluida, onde cada módulo, API e tela nasce pronta para evoluir.
                                 </p>
                                 <p class="mb-8">
-                                    O DevsAPI entende a rotina de quem cria. Por isso, automatiza o que é técnico, mas
-                                    preserva o que é criativo. Você define os campos, relacionamentos e regras — nós geramos
+                                    O DevsAPI entende a rotina de quem cria. Por isso, automatiza o que é técnico,
+                                    mas
+                                    preserva o que é criativo. Você define os campos, relacionamentos e regras — nós
+                                    geramos
                                     todo o código com padrão, segurança e performance.
                                 </p>
                                 <p class="mb-8">
-                                    É mais que um gerador de código: é um ambiente completo de produtividade para quem
+                                    É mais que um gerador de código: é um ambiente completo de produtividade para
+                                    quem
                                     acredita que tecnologia deve acelerar sonhos, não complicá-los.
                                 </p>
 
@@ -148,7 +154,8 @@
                                     <span class="fs-1 lh-1 text-gray-700">“</span>
                                     Automatizar é libertar o desenvolvedor da repetição —
                                     <br />
-                                    <span class="text-gray-700 me-1">para focar no que realmente importa:</span> criar.
+                                    <span class="text-gray-700 me-1">para focar no que realmente importa:</span>
+                                    criar.
                                     <span class="fs-1 lh-1 text-gray-700">“</span>
                                 </div>
 
@@ -166,7 +173,8 @@
                                 <h3 class="fs-2hx text-gray-900 mb-5">Missão, Visão e Valores</h3>
                                 <div class="fs-5 text-muted fw-semibold">
                                     O propósito do DevsAPI é impulsionar o desenvolvimento com propósito,
-                                    <br />transformando ideias em soluções reais com agilidade, qualidade e simplicidade.
+                                    <br />transformando ideias em soluções reais com agilidade, qualidade e
+                                    simplicidade.
                                 </div>
                             </div>
 
@@ -186,8 +194,10 @@
                                         <div class="m-0 mt-5 text-center">
                                             <h4 class="fs-4 text-gray-900 fw-bold mb-3">Missão</h4>
                                             <div class="fw-semibold fs-5 text-gray-600">
-                                                Simplificar a criação de sistemas e APIs, automatizando o que é técnico
-                                                para que desenvolvedores e equipes foquem na inovação e no impacto das
+                                                Simplificar a criação de sistemas e APIs, automatizando o que é
+                                                técnico
+                                                para que desenvolvedores e equipes foquem na inovação e no impacto
+                                                das
                                                 ideias.
                                             </div>
                                         </div>
@@ -210,7 +220,8 @@
                                             <h4 class="fs-4 text-gray-900 fw-bold mb-3">Visão</h4>
                                             <div class="fw-semibold fs-5 text-gray-600">
                                                 Ser a principal plataforma de automação de código da América Latina,
-                                                reconhecida por acelerar o desenvolvimento e elevar o padrão de qualidade de
+                                                reconhecida por acelerar o desenvolvimento e elevar o padrão de
+                                                qualidade de
                                                 software.
                                             </div>
                                         </div>
@@ -232,8 +243,10 @@
                                         <div class="m-0 mt-5 text-center">
                                             <h4 class="fs-4 text-gray-900 fw-bold mb-3">Valores</h4>
                                             <div class="fw-semibold fs-5 text-gray-600">
-                                                Inovação constante, colaboração, ética, e compromisso com resultados.
-                                                Valorizamos o tempo do desenvolvedor e acreditamos que tecnologia deve
+                                                Inovação constante, colaboração, ética, e compromisso com
+                                                resultados.
+                                                Valorizamos o tempo do desenvolvedor e acreditamos que tecnologia
+                                                deve
                                                 simplificar.
                                             </div>
                                         </div>
