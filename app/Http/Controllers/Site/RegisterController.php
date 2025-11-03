@@ -261,11 +261,21 @@ class RegisterController extends Controller
     // =================================================
     // Verificação do campo e-mail
     // =================================================
+
     public function checkEmail(Request $request)
     {
-        $exists = PersonUser::where('email', $request->email)
-            ->whereNull('deleted_at')
-            ->exists();
+        $email = $request->email;
+        $personId = $request->query('person_id'); // Pega o person_id da URL
+
+        // ✅ Se person_id for fornecido, ignora o e-mail do próprio usuário
+        $query = PersonUser::where('email', $email)
+            ->whereNull('deleted_at');
+
+        if ($personId) {
+            $query->where('id_person', '!=', $personId);
+        }
+
+        $exists = $query->exists();
 
         return response()->json(['exists' => $exists]);
     }

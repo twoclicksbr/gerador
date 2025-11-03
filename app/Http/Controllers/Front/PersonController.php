@@ -131,15 +131,21 @@ class PersonController extends Controller
                 'whatsapp'      => 'nullable|string|max:20',
                 'cpf_cnpj'      => 'nullable|string|max:20',
                 'gender'        => 'nullable|string|max:20',
-                'birthdate'     => 'nullable|date',
+                'birthdate'     => 'nullable|date_format:d/m/Y',
                 'active'        => 'boolean',
             ]);
+
+            // ✅ Converte a data de d/m/Y para Y-m-d antes de salvar
+            $birthdate = null;
+            if (!empty($validated['birthdate'])) {
+                $birthdate = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['birthdate'])->format('Y-m-d');
+            }
 
             $person = Person::findOrFail($id);
             $person->update([
                 'name'      => $validated['name'],
                 'gender'    => $validated['gender'] ?? null,
-                'birthdate' => $validated['birthdate'] ?? null,
+                'birthdate' => $birthdate,
                 'cpf_cnpj'  => $validated['cpf_cnpj'],
                 'whatsapp'  => $validated['whatsapp'],
                 'active'    => $request->has('active') ? 1 : 0,
@@ -233,7 +239,6 @@ class PersonController extends Controller
         }
     }
 
-
     public function updateEmail(Request $request, $module, $id)
     {
         Log::info('📧 [PersonController@updateEmail] Atualização de e-mail iniciada', ['id' => $id]);
@@ -257,24 +262,33 @@ class PersonController extends Controller
                 ], 403);
             }
 
-            $validated = $request->validate([
-                'email' => [
-                    'required',
-                    'email',
-                    Rule::unique('tc_person_user', 'email')->ignore($person->user?->id),
-                ],
-            ]);
-
             $user = $person->user;
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'Usuário não encontrado'], 404);
             }
 
+            // ✅ Validação com verificação de e-mail único
+            $validated = $request->validate([
+                'email' => [
+                    'required',
+                    'email',
+                    'max:191',
+                    Rule::unique('tc_person_user', 'email')
+                        ->ignore($user->id) // Ignora o e-mail atual do próprio usuário
+                        ->whereNull('deleted_at'), // Ignora registros soft-deleted
+                ],
+            ], [
+                'email.required' => 'O e-mail é obrigatório.',
+                'email.email' => 'Informe um e-mail válido.',
+                'email.unique' => 'Este e-mail já está cadastrado por outro usuário.',
+            ]);
+
             $user->update(['email' => $validated['email']]);
 
             Log::info('✅ E-mail atualizado com sucesso', [
                 'person_id' => $person->id,
-                'user_id' => $authUser->id,
+                'user_id' => $user->id,
+                'new_email' => $validated['email'],
             ]);
 
             return response()->json(['success' => true, 'message' => 'E-mail atualizado com sucesso!']);
@@ -287,7 +301,6 @@ class PersonController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
     }
-
     public function updatePassword(Request $request, $module, $id)
     {
         Log::info('🔑 [PersonController@updatePassword] Atualização de senha iniciada', ['id' => $id]);

@@ -2,11 +2,14 @@
 
     {{-- Switch Público / Inativo --}}
     <div class="form-check form-switch form-check-custom form-check-solid">
-        <input class="form-check-input me-2" type="checkbox" name="active" id="active"
-            {{ old('active', $item->active ?? true) ? 'checked' : '' }}
+        {{-- ✅ CAMPO HIDDEN OBRIGATÓRIO --}}
+        <input type="hidden" name="active" value="0">
+        {{-- Checkbox que sobrescreve com 1 quando marcado --}}
+        <input class="form-check-input me-2" type="checkbox" name="active" value="1" id="active"
+            {{ old('active', $item->active ?? 0) ? 'checked' : '' }}
             {{ isset($isTrashed) && $isTrashed ? 'disabled' : '' }}>
         <label class="form-check-label fw-semibold text-gray-700 ms-2" for="active" id="active_label">
-            {{ old('active', $item->active ?? true) ? 'Público' : 'Inativo' }}
+            {{ old('active', $item->active ?? 0) ? 'Público' : 'Inativo' }}
         </label>
 
         @if (empty($isTrashed))

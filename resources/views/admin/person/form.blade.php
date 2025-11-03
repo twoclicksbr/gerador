@@ -352,10 +352,18 @@
         document.addEventListener('DOMContentLoaded', function () {
             const zip = document.getElementById('zip_code');
 
-            zip.addEventListener('input', function (e) {
-                let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+            // Função para aplicar máscara
+            function applyMask(input) {
+                let v = input.value.replace(/\D/g, '').slice(0, 8);
                 v = v.replace(/(\d{5})(\d)/, '$1-$2');
-                e.target.value = v;
+                input.value = v;
+            }
+
+            // ✅ Aplica máscara ao carregar a página (se houver valor)
+            applyMask(zip);
+
+            zip.addEventListener('input', function (e) {
+                applyMask(e.target);
             });
 
             zip.addEventListener('blur', function () {
@@ -365,13 +373,16 @@
                 fetch(`https://viacep.com.br/ws/${cep}/json/`)
                     .then(r => r.json())
                     .then(data => {
-                        if (data.erro) return;
+                        if (data.erro) {
+                            alert('❌ CEP não encontrado. Verifique o CEP e tente novamente.');
+                            return;
+                        }
                         document.getElementById('street').value = data.logradouro || '';
                         document.getElementById('district').value = data.bairro || '';
                         document.getElementById('city').value = data.localidade || '';
                         document.getElementById('state').value = data.uf || '';
                     })
-                    .catch(() => console.warn('Erro ao buscar CEP'));
+                    .catch(() => alert('❌ Erro ao buscar CEP. Tente novamente.'));
             });
         });
     </script>
@@ -388,11 +399,12 @@
                 <label class="form-label required">E-mail:</label>
                 <input type="email" id="email_input" class="form-control form-control-solid"
                        value="{{ old('email', $item->user?->email ?? '') }}" />
+                <div id="email-feedback" class="mt-2 small"></div>
             </div>
 
             <div class="">
                 <button type="button" class="btn btn-light-primary" id="btn-update-email">Atualizar E-mail</button>
-                <div id="email-feedback" class="mt-2 small"></div>
+
             </div>
         </div>
 
@@ -465,6 +477,12 @@
                 return;
             }
 
+            if (!email.includes('@')) {
+                emailFeedback.textContent = '❌ Informe um e-mail válido.';
+                emailFeedback.className = 'text-danger small mt-2';
+                return;
+            }
+
             btnUpdateEmail.disabled = true;
             btnUpdateEmail.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
 
@@ -486,6 +504,8 @@
                     if (data.success) {
                         emailFeedback.textContent = '✅ ' + data.message;
                         emailFeedback.className = 'text-success small mt-2';
+                        // ✅ MANTÉM O NOVO E-MAIL NO CAMPO (em vez de limpar)
+                        // emailInput.value permanece com o novo e-mail
                     } else {
                         emailFeedback.textContent = '❌ ' + (data.message || 'Erro desconhecido');
                         emailFeedback.className = 'text-danger small mt-2';
@@ -499,6 +519,43 @@
                 .finally(() => {
                     btnUpdateEmail.disabled = false;
                     btnUpdateEmail.innerHTML = 'Atualizar E-mail';
+                });
+        });
+
+        // ✅ Validação em tempo real ao sair do campo
+
+        // ✅ Validação em tempo real ao sair do campo
+        emailInput.addEventListener('blur', function() {
+            const email = emailInput.value.trim();
+            // ✅ Pega o e-mail atual diretamente do input (que é o valor inicial)
+            const currentEmail = '{{ $item->user?->email ?? '' }}';
+
+            if (!email || !email.includes('@')) {
+                emailFeedback.textContent = '';
+                return;
+            }
+
+            // ✅ Se o e-mail digitado é EXATAMENTE igual ao atual, marca como "E-mail atual"
+            if (email.toLowerCase() === currentEmail.toLowerCase()) {
+                emailFeedback.textContent = '✅ E-mail atual.';
+                emailFeedback.className = 'text-success small mt-2';
+                return;
+            }
+
+            // ✅ Se é diferente do atual, verifica se existe em outro registro
+            fetch(`/check-email?email=${encodeURIComponent(email)}&person_id=${personId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.exists) {
+                        emailFeedback.textContent = '⚠️ Este e-mail já está cadastrado.';
+                        emailFeedback.className = 'text-warning small mt-2';
+                    } else {
+                        emailFeedback.textContent = '✅ E-mail disponível.';
+                        emailFeedback.className = 'text-success small mt-2';
+                    }
+                })
+                .catch(() => {
+                    emailFeedback.textContent = '';
                 });
         });
 
