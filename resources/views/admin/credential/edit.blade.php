@@ -13,16 +13,25 @@
 
                 <div class="card-body">
                     <form action="{{ route('admin.module.update', ['module' => 'credential', 'id' => $item->id]) }}"
-                        method="POST">
+                          method="POST">
                         @csrf
                         @method('PUT')
 
-                        {{-- Form dinâmico (bloqueia se for soft deleted) --}}
                         @include('admin.credential.form', [
                             'item' => $item,
                             'isTrashed' => $isTrashed ?? false,
+                            'module' => 'credential',
                         ])
                     </form>
+
+                    {{-- ⚙️ Form de restauração fora do form principal --}}
+                    @if ($isTrashed ?? false)
+                        <form id="restore-form"
+                              action="{{ route('admin.module.restore', ['module' => $module ?? 'credential', 'id' => $item->id]) }}"
+                              method="POST" style="display:none;">
+                            @csrf
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

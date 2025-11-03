@@ -2,12 +2,10 @@
 
     {{-- Switch Público / Inativo --}}
     <div class="form-check form-switch form-check-custom form-check-solid">
-        {{-- ✅ CAMPO HIDDEN OBRIGATÓRIO --}}
         <input type="hidden" name="active" value="0">
-        {{-- Checkbox que sobrescreve com 1 quando marcado --}}
         <input class="form-check-input me-2" type="checkbox" name="active" value="1" id="active"
             {{ old('active', $item->active ?? 0) ? 'checked' : '' }}
-            {{ isset($isTrashed) && $isTrashed ? 'disabled' : '' }}>
+            {{ ($isTrashed ?? false) ? 'disabled' : '' }}>
         <label class="form-check-label fw-semibold text-gray-700 ms-2" for="active" id="active_label">
             {{ old('active', $item->active ?? 0) ? 'Público' : 'Inativo' }}
         </label>
@@ -17,13 +15,9 @@
                 document.addEventListener('DOMContentLoaded', function() {
                     const checkbox = document.getElementById('active');
                     const label = document.getElementById('active_label');
-
-                    const updateLabel = () => {
-                        label.textContent = checkbox.checked ? 'Público' : 'Inativo';
-                    };
-
+                    const updateLabel = () => label.textContent = checkbox.checked ? 'Público' : 'Inativo';
                     checkbox.addEventListener('change', updateLabel);
-                    updateLabel(); // estado inicial
+                    updateLabel();
                 });
             </script>
         @endif
@@ -31,23 +25,21 @@
 
     {{-- Botões de ação --}}
     <div class="d-flex">
-        @if (isset($isTrashed) && $isTrashed)
+        @if ($isTrashed ?? false)
             {{-- Restaurar / Descartar --}}
-            <form action="{{ route('admin.module.restore', ['module' => $module, 'id' => $item->id]) }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-light-success me-3">
-                    <i class="ki-solid ki-arrow-circle-left fs-3">
-                        {{-- <span class="path1"></span> --}}
-                        {{-- <span class="path2"></span> --}}
-                    </i> Restaurar
-                </button>
-                <a class="btn btn-sm btn-light-danger" href="{{ route('admin.module.index', ['module' => $module]) }}">
-                    <i class="ki-solid ki-black-left-line fs-4 me-2"></i> Descartar
-                </a>
-            </form>
+            <button type="button" class="btn btn-sm btn-light-success me-3"
+                    onclick="if(confirm('Deseja restaurar este registro?')) document.getElementById('restore-form').submit();">
+                <i class="ki-solid ki-arrow-circle-left fs-3"></i> Restaurar
+            </button>
+
+            <a class="btn btn-sm btn-light-danger"
+               href="{{ route('admin.module.index', ['module' => $module ?? 'credential']) }}">
+                <i class="ki-solid ki-black-left-line fs-4 me-2"></i> Descartar
+            </a>
         @else
             {{-- Salvar / Cancelar --}}
-            <a class="btn btn-sm btn-light-danger me-3" href="{{ route('admin.module.index', ['module' => $module]) }}">
+            <a class="btn btn-sm btn-light-danger me-3"
+               href="{{ route('admin.module.index', ['module' => $module ?? 'credential']) }}">
                 <i class="ki-solid ki-black-left-line fs-4 me-2"></i> Descartar
             </a>
 
@@ -60,3 +52,4 @@
         @endif
     </div>
 </div>
+

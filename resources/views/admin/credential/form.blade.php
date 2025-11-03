@@ -129,4 +129,6 @@
     </div>
 @endif
 
-@include('admin.components.card-footer-submit')
+@include('admin.components.card-footer-submit', [
+    'module' => $module ?? 'credential',
+])

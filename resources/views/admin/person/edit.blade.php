@@ -21,8 +21,18 @@
                         @include('admin.person.form', [
                             'item' => $item,
                             'isTrashed' => $isTrashed ?? false,
+                            'module' => 'person',
                         ])
                     </form>
+
+                    {{-- ⚙️ Form de restauração fora do form principal --}}
+                    @if ($isTrashed ?? false)
+                        <form id="restore-form"
+                              action="{{ route('admin.module.restore', ['module' => $module ?? 'person', 'id' => $item->id]) }}"
+                              method="POST" style="display:none;">
+                            @csrf
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
