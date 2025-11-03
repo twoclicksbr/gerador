@@ -4,8 +4,7 @@
     <div class="form-check form-switch form-check-custom form-check-solid">
         <input type="hidden" name="active" value="0">
         <input class="form-check-input me-2" type="checkbox" name="active" value="1" id="active"
-            {{ old('active', $item->active ?? 0) ? 'checked' : '' }}
-            {{ ($isTrashed ?? false) ? 'disabled' : '' }}>
+            {{ old('active', $item->active ?? 1) ? 'checked' : '' }}>
         <label class="form-check-label fw-semibold text-gray-700 ms-2" for="active" id="active_label">
             {{ old('active', $item->active ?? 0) ? 'Público' : 'Inativo' }}
         </label>

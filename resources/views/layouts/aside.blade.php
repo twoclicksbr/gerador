@@ -48,6 +48,26 @@
                     </div>
 
                     <div class="menu-item">
+                        <a href="{{ route('admin.module.index', ['module' => 'type_address']) }}"
+                           class="menu-link {{ request()->is('admin/type_address*') ? 'active' : '' }}">
+                            <span class="menu-title">Tipo de Endereços</span>
+                            <span class="badge badge-light-primary">
+                                {{ number_format(\App\Models\Api\TypeAddress::count(), 0, ',', '.') }}
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
+                        <a href="{{ route('admin.module.index', ['module' => 'token']) }}"
+                           class="menu-link {{ request()->is('admin/token*') ? 'active' : '' }}">
+                            <span class="menu-title">Token</span>
+                            <span class="badge badge-light-primary">
+                                {{ number_format(\App\Models\Api\Token::count(), 0, ',', '.') }}
+                            </span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item">
                         <a href="" class="menu-link">
                             <span class="menu-title">Tags</span>
                         </a>

@@ -29,7 +29,7 @@
 
                                 <div class="fv-row mb-8">
                                     <input type="email" placeholder="E-mail" name="email" required autocomplete="off"
-                                        class="form-control bg-transparent" value="alex@twoclicks.com.br" autofocus />
+                                        class="form-control bg-transparent" value="alex@devsapi.com.br" autofocus />
                                 </div>
 
                                 <div class="fv-row mb-3">
