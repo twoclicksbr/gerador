@@ -40,4 +40,9 @@ class Person extends Model
     {
         return $this->hasOne(PersonUser::class, 'id_person');
     }
+
+    public function personPlan()
+    {
+        return $this->hasOne(PersonPlan::class, 'id_person');
+    }
 }

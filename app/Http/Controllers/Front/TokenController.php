@@ -12,8 +12,12 @@ class TokenController extends Controller
     public function index(Request $request, $module)
     {
         $count = Token::count();
+
         $items = Token::withTrashed()
-            ->orderBy('environment', 'desc')
+            ->join('tc_credential', 'tc_credential.id', '=', 'tc_token.id_credential')
+            ->orderBy('tc_credential.name', 'asc')   // 🔹 nome da credencial
+            ->orderBy('tc_token.environment', 'desc') // 🔹 ambiente
+            ->select('tc_token.*')
             ->get();
 
         return view("admin.$module.index", compact('module', 'count', 'items'));
@@ -21,7 +25,10 @@ class TokenController extends Controller
 
     public function create(Request $request, $module)
     {
-        $credentials = \App\Models\Api\Credential::orderBy('name')->get();
+        $credentials = \App\Models\Api\Credential::whereDoesntHave('token')
+            ->orderBy('name')
+            ->get();
+
         return view("admin.$module.create", compact('module', 'credentials'));
     }
 
@@ -47,7 +54,11 @@ class TokenController extends Controller
     {
         $item = Token::withTrashed()->findOrFail($id);
         $isTrashed = $item->trashed();
-        $credentials = Credential::orderBy('name')->get();
+
+        $credentials = \App\Models\Api\Credential::whereDoesntHave('token')
+            ->orWhere('id', $item->id_credential)
+            ->orderBy('name')
+            ->get();
 
         return view("admin.$module.edit", compact('item', 'module', 'isTrashed', 'credentials'));
     }
@@ -55,10 +66,15 @@ class TokenController extends Controller
     public function update(Request $request, $module, $id)
     {
         $data = $request->validate([
-            'ip_address'  => 'nullable|string|max:100',
-            'device_info' => 'nullable|string|max:255',
-            'active'      => 'boolean',
+            'id_credential' => 'required|exists:tc_credential,id',
+            'environment'   => 'required|in:production,sandbox',
+            'token'         => 'required|string|max:255|unique:tc_token,token,' . $id,
+            'ip_address'    => 'nullable|string|max:100',
+            'device_info'   => 'nullable|string|max:255',
+            'active'        => 'boolean',
         ]);
+
+        $data['active'] = $request->has('active') ? 1 : 0;
 
         $record = Token::findOrFail($id);
         $record->update($data);

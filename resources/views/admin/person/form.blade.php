@@ -1,4 +1,5 @@
 @php
+    $item = $item ?? null;
     $disabled = isset($isTrashed) && $isTrashed ? 'disabled' : '';
 @endphp
 
@@ -393,30 +394,40 @@
     <legend class="float-none w-auto px-3 fs-5 fw-bold text-gray-700">Acesso ao DevsAPI:</legend>
 
     <div class="row gy-4">
-        {{-- 📧 Seção: Atualizar E-mail --}}
+        {{-- 📧 E-mail --}}
         <div class="col-md-4">
             <div class="fv-row mb-3">
                 <label class="form-label required">E-mail:</label>
-                <input type="email" id="email_input" class="form-control form-control-solid"
-                       value="{{ old('email', $item->user?->email ?? '') }}" />
+                <input type="email"
+                       id="email_input"
+                       name="{{ isset($item) ? '' : 'email' }}"
+                       class="form-control form-control-solid"
+                       value="{{ old('email', $item->user?->email ?? '') }}"
+                    {{ isset($item) ? '' : 'required' }} />
                 <div id="email-feedback" class="mt-2 small"></div>
             </div>
 
-            <div class="">
+            {{-- Só mostra o botão de atualização no EDIT --}}
+            @if(isset($item))
                 <button type="button" class="btn btn-light-primary" id="btn-update-email">Atualizar E-mail</button>
-
-            </div>
+            @endif
         </div>
 
-        {{-- 🔐 Seção: Atualizar Senha --}}
+        {{-- 🔐 Senha --}}
         <div class="col-md-8">
             <div class="row gy-3">
                 {{-- Nova Senha --}}
                 <div class="col-md-6 fv-row" data-kt-password-meter="true">
-                    <label class="form-label">Nova Senha:</label>
+                    <label class="form-label">{{ isset($item) ? 'Nova Senha:' : 'Senha:' }}</label>
                     <div class="position-relative mb-3">
-                        <input class="form-control form-control-solid" type="password"
-                               placeholder="Em branco mantem senha atual" id="password_input" autocomplete="off" />
+                        <input class="form-control form-control-solid"
+                               type="password"
+                               id="password_input"
+                               name="{{ isset($item) ? '' : 'password' }}"
+                               placeholder="{{ isset($item) ? 'Em branco mantém senha atual' : 'Crie uma senha' }}"
+                               autocomplete="off"
+                            {{ isset($item) ? '' : 'required' }} />
+
                         <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
                               id="btn-toggle-password" style="cursor: pointer;">
                             <i class="ki-outline ki-eye-slash fs-2"></i>
@@ -424,43 +435,46 @@
                         </span>
                     </div>
 
+                    {{-- Barra de força --}}
                     <div class="d-flex align-items-center mb-3" id="password-bars">
-                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-                        <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px"></div>
+                        @for ($i = 0; $i < 4; $i++)
+                            <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                        @endfor
                     </div>
 
                     <div id="passwordMessage" class="text-muted">
-                        Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao menos uma letra maiúscula.
+                        Use 8 ou mais caracteres com letras, números, símbolos e ao menos uma maiúscula.
                     </div>
                 </div>
 
                 {{-- Confirmar Senha --}}
                 <div class="col-md-6 fv-row">
                     <label class="form-label">Confirmar Senha:</label>
-                    <input id="confirm_password_input" type="password"
+                    <input id="confirm_password_input"
+                           type="password"
+                           name="{{ isset($item) ? '' : 'password_confirmation' }}"
                            class="form-control form-control-solid"
-                           autocomplete="off" placeholder="Confirme a nova senha" />
+                           autocomplete="off"
+                           placeholder="Confirme a senha"
+                        {{ isset($item) ? '' : 'required' }} />
+                    <div id="confirmMessage" class="text-muted mt-2">Repita a senha.</div>
+                </div>
 
-                    <div id="confirmMessage" class="text-muted mt-2">
-                        Repita a senha.
+                {{-- Só mostra o botão de atualização no EDIT --}}
+                @if(isset($item))
+                    <div class="col-12">
+                        <button type="button" class="btn btn-light-primary" id="btn-update-password">Atualizar Senha</button>
+                        <div id="password-feedback" class="mt-2 small"></div>
                     </div>
-                </div>
-
-                {{-- Botão em nova linha --}}
-                <div class="col-12">
-                    <button type="button" class="btn btn-light-primary" id="btn-update-password">Atualizar Senha</button>
-                    <div id="password-feedback" class="mt-2 small"></div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
 </fieldset>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const personId = "{{ $item->id }}";
+    document.addEventListener('DOMContentLoaded', function () {
+        const personId = "{{ $item->id ?? '' }}";
         const module = "{{ $module }}";
 
         // ========== EMAIL SECTION ==========
@@ -468,66 +482,57 @@
         const btnUpdateEmail = document.getElementById('btn-update-email');
         const emailFeedback = document.getElementById('email-feedback');
 
-        btnUpdateEmail.addEventListener('click', function() {
-            const email = emailInput.value.trim();
+        if (btnUpdateEmail && personId) {
+            btnUpdateEmail.addEventListener('click', function () {
+                const email = emailInput.value.trim();
 
-            if (!email) {
-                emailFeedback.textContent = '❌ Por favor, preencha o e-mail.';
-                emailFeedback.className = 'text-danger small mt-2';
-                return;
-            }
-
-            if (!email.includes('@')) {
-                emailFeedback.textContent = '❌ Informe um e-mail válido.';
-                emailFeedback.className = 'text-danger small mt-2';
-                return;
-            }
-
-            btnUpdateEmail.disabled = true;
-            btnUpdateEmail.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
-
-            fetch(`/ajax/update/${module}/email/${personId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: JSON.stringify({ email })
-            })
-                .then(res => {
-                    console.log('Response status:', res.status);
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    return res.json();
-                })
-                .then(data => {
-                    console.log('Email update response:', data);
-                    if (data.success) {
-                        emailFeedback.textContent = '✅ ' + data.message;
-                        emailFeedback.className = 'text-success small mt-2';
-                        // ✅ MANTÉM O NOVO E-MAIL NO CAMPO (em vez de limpar)
-                        // emailInput.value permanece com o novo e-mail
-                    } else {
-                        emailFeedback.textContent = '❌ ' + (data.message || 'Erro desconhecido');
-                        emailFeedback.className = 'text-danger small mt-2';
-                    }
-                })
-                .catch(err => {
-                    console.error('Email update error:', err);
-                    emailFeedback.textContent = '❌ ' + err.message;
+                if (!email) {
+                    emailFeedback.textContent = '❌ Por favor, preencha o e-mail.';
                     emailFeedback.className = 'text-danger small mt-2';
+                    return;
+                }
+
+                if (!email.includes('@')) {
+                    emailFeedback.textContent = '❌ Informe um e-mail válido.';
+                    emailFeedback.className = 'text-danger small mt-2';
+                    return;
+                }
+
+                btnUpdateEmail.disabled = true;
+                btnUpdateEmail.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
+
+                fetch(`/ajax/update/${module}/email/${personId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({email})
                 })
-                .finally(() => {
-                    btnUpdateEmail.disabled = false;
-                    btnUpdateEmail.innerHTML = 'Atualizar E-mail';
-                });
-        });
+                    .then(res => res.ok ? res.json() : Promise.reject(res))
+                    .then(data => {
+                        if (data.success) {
+                            emailFeedback.textContent = '✅ ' + data.message;
+                            emailFeedback.className = 'text-success small mt-2';
+                        } else {
+                            emailFeedback.textContent = '❌ ' + (data.message || 'Erro desconhecido');
+                            emailFeedback.className = 'text-danger small mt-2';
+                        }
+                    })
+                    .catch(() => {
+                        emailFeedback.textContent = '❌ Erro ao atualizar o e-mail.';
+                        emailFeedback.className = 'text-danger small mt-2';
+                    })
+                    .finally(() => {
+                        btnUpdateEmail.disabled = false;
+                        btnUpdateEmail.innerHTML = 'Atualizar E-mail';
+                    });
+            });
+        }
 
-        // ✅ Validação em tempo real ao sair do campo
-
-        // ✅ Validação em tempo real ao sair do campo
-        emailInput.addEventListener('blur', function() {
+        // ✅ Verificação de e-mail duplicado (ativa em ambas as telas)
+        emailInput?.addEventListener('blur', function () {
             const email = emailInput.value.trim();
-            // ✅ Pega o e-mail atual diretamente do input (que é o valor inicial)
             const currentEmail = '{{ $item->user?->email ?? '' }}';
 
             if (!email || !email.includes('@')) {
@@ -535,14 +540,12 @@
                 return;
             }
 
-            // ✅ Se o e-mail digitado é EXATAMENTE igual ao atual, marca como "E-mail atual"
             if (email.toLowerCase() === currentEmail.toLowerCase()) {
                 emailFeedback.textContent = '✅ E-mail atual.';
                 emailFeedback.className = 'text-success small mt-2';
                 return;
             }
 
-            // ✅ Se é diferente do atual, verifica se existe em outro registro
             fetch(`/check-email?email=${encodeURIComponent(email)}&person_id=${personId}`)
                 .then(res => res.json())
                 .then(data => {
@@ -554,9 +557,7 @@
                         emailFeedback.className = 'text-success small mt-2';
                     }
                 })
-                .catch(() => {
-                    emailFeedback.textContent = '';
-                });
+                .catch(() => emailFeedback.textContent = '');
         });
 
         // ========== PASSWORD SECTION ==========
@@ -569,154 +570,261 @@
         const passwordFeedback = document.getElementById('password-feedback');
         const passwordBars = document.querySelectorAll('#password-bars > div');
 
-        const defaultMsg = 'Use 8 ou mais caracteres com uma mistura de letras, números, símbolos e ao menos uma letra maiúscula.';
+        const defaultMsg = 'Use 8 ou mais caracteres com letras, números, símbolos e ao menos uma maiúscula.';
         const defaultConfirmMsg = 'Repita a senha.';
 
-        function isPasswordValid(password) {
-            const hasMinLength = password.length >= 8;
-            const hasUpperCase = /[A-Z]/.test(password);
-            const hasNumbers = /\d/.test(password);
-            const hasSymbols = /[\W_]/.test(password);
-            return hasMinLength && hasUpperCase && hasNumbers && hasSymbols;
-        }
+        const isPasswordValid = p =>
+            p.length >= 8 && /[A-Z]/.test(p) && /\d/.test(p) && /[\W_]/.test(p);
 
-        function getPasswordStrength(password) {
-            if (!password) return 0;
-            let strength = 0;
-            if (password.length >= 8) strength++;
-            if (password.length >= 12) strength++;
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-            if (/\d/.test(password)) strength++;
-            if (/[\W_]/.test(password)) strength++;
-            return Math.min(strength, 4);
-        }
+        const getStrength = p => Math.min(
+            [p.length >= 8, p.length >= 12, /[a-z]/.test(p) && /[A-Z]/.test(p), /\d/.test(p), /[\W_]/.test(p)]
+                .filter(Boolean).length, 4
+        );
 
-        function updatePasswordBars(password) {
-            const strength = getPasswordStrength(password);
-            const isValid = isPasswordValid(password);
-
-            passwordBars.forEach((bar, index) => {
-                if (index < strength) {
-                    if (isValid) {
-                        bar.classList.add('bg-success');
-                        bar.classList.remove('bg-warning');
-                    } else {
-                        bar.classList.add('bg-warning');
-                        bar.classList.remove('bg-success');
-                    }
-                } else {
-                    bar.classList.remove('bg-success', 'bg-warning');
-                }
+        const updateBars = p => {
+            const s = getStrength(p);
+            const valid = isPasswordValid(p);
+            passwordBars.forEach((bar, i) => {
+                bar.classList.toggle('bg-success', i < s && valid);
+                bar.classList.toggle('bg-warning', i < s && !valid);
+                if (i >= s) bar.classList.remove('bg-success', 'bg-warning');
             });
-        }
+        };
 
-        btnTogglePassword.addEventListener('click', function(e) {
-            e.preventDefault();
-            const isPassword = passwordInput.type === 'password';
-            passwordInput.type = isPassword ? 'text' : 'password';
-            btnTogglePassword.querySelectorAll('i').forEach(icon => icon.classList.toggle('d-none'));
+        btnTogglePassword?.addEventListener('click', () => {
+            const isPass = passwordInput.type === 'password';
+            passwordInput.type = isPass ? 'text' : 'password';
+            btnTogglePassword.querySelectorAll('i').forEach(i => i.classList.toggle('d-none'));
         });
 
-        passwordInput.addEventListener('input', function() {
-            const value = passwordInput.value;
-            updatePasswordBars(value);
-
-            if (!value) {
-                passwordMessage.textContent = defaultMsg;
-                passwordMessage.className = 'text-muted';
-            } else if (!isPasswordValid(value)) {
-                passwordMessage.textContent = '❌ A senha ainda não atende aos requisitos.';
-                passwordMessage.className = 'text-danger';
-            } else {
-                passwordMessage.textContent = '✅ A senha atende a todos os requisitos.';
-                passwordMessage.className = 'text-success';
-            }
-
+        passwordInput?.addEventListener('input', e => {
+            const v = e.target.value;
+            updateBars(v);
+            passwordMessage.textContent = !v ? defaultMsg :
+                isPasswordValid(v) ? '✅ A senha atende aos requisitos.' : '❌ A senha ainda não atende.';
+            passwordMessage.className = !v ? 'text-muted' :
+                isPasswordValid(v) ? 'text-success' : 'text-danger';
             validateConfirm();
         });
 
-        function validateConfirm() {
-            const pass = passwordInput.value;
-            const conf = confirmPasswordInput.value;
+        const validateConfirm = () => {
+            const p = passwordInput.value;
+            const c = confirmPasswordInput.value;
+            confirmMessage.textContent = !c ? defaultConfirmMsg :
+                (c !== p ? '❌ As senhas não conferem.' : '✅ As senhas conferem.');
+            confirmMessage.className = !c ? 'text-muted mt-2' :
+                (c !== p ? 'text-danger mt-2' : 'text-success mt-2');
+        };
 
-            if (!conf) {
-                confirmMessage.textContent = defaultConfirmMsg;
-                confirmMessage.className = 'text-muted mt-2';
-            } else if (conf !== pass) {
-                confirmMessage.textContent = '❌ As senhas não conferem.';
-                confirmMessage.className = 'text-danger mt-2';
-            } else {
-                confirmMessage.textContent = '✅ As senhas conferem.';
-                confirmMessage.className = 'text-success mt-2';
-            }
+        confirmPasswordInput?.addEventListener('input', validateConfirm);
+
+        if (btnUpdatePassword && personId) {
+            btnUpdatePassword.addEventListener('click', () => {
+                const p = passwordInput.value.trim();
+                const c = confirmPasswordInput.value.trim();
+
+                if (!p) return showFeedback('❌ Por favor, preencha a senha.');
+                if (p !== c) return showFeedback('❌ As senhas não conferem.');
+                if (!isPasswordValid(p)) return showFeedback('❌ A senha não atende aos requisitos.');
+
+                btnUpdatePassword.disabled = true;
+                btnUpdatePassword.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
+
+                fetch(`/ajax/update/${module}/password/${personId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({password: p})
+                })
+                    .then(res => res.ok ? res.json() : Promise.reject(res))
+                    .then(data => {
+                        if (data.success) {
+                            showFeedback('✅ ' + data.message, true);
+                            passwordInput.value = '';
+                            confirmPasswordInput.value = '';
+                            updateBars('');
+                            validateConfirm();
+                        } else {
+                            showFeedback('❌ ' + (data.message || 'Erro desconhecido'));
+                        }
+                    })
+                    .catch(() => showFeedback('❌ Erro ao atualizar senha.'))
+                    .finally(() => {
+                        btnUpdatePassword.disabled = false;
+                        btnUpdatePassword.innerHTML = 'Atualizar Senha';
+                    });
+
+                function showFeedback(msg, success = false) {
+                    passwordFeedback.textContent = msg;
+                    passwordFeedback.className = (success ? 'text-success' : 'text-danger') + ' small mt-2';
+                }
+            });
         }
-
-        confirmPasswordInput.addEventListener('input', validateConfirm);
-
-        btnUpdatePassword.addEventListener('click', function() {
-            const password = passwordInput.value.trim();
-            const confirmPassword = confirmPasswordInput.value.trim();
-
-            if (!password) {
-                passwordFeedback.textContent = '❌ Por favor, preencha a senha.';
-                passwordFeedback.className = 'text-danger small mt-2';
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                passwordFeedback.textContent = '❌ As senhas não conferem.';
-                passwordFeedback.className = 'text-danger small mt-2';
-                return;
-            }
-
-            if (!isPasswordValid(password)) {
-                passwordFeedback.textContent = '❌ A senha não atende aos requisitos.';
-                passwordFeedback.className = 'text-danger small mt-2';
-                return;
-            }
-
-            btnUpdatePassword.disabled = true;
-            btnUpdatePassword.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Atualizando...';
-
-            fetch(`/ajax/update/${module}/password/${personId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: JSON.stringify({ password })
-            })
-                .then(res => {
-                    console.log('Response status:', res.status);
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    return res.json();
-                })
-                .then(data => {
-                    console.log('Password update response:', data);
-                    if (data.success) {
-                        passwordFeedback.textContent = '✅ ' + data.message;
-                        passwordFeedback.className = 'text-success small mt-2';
-                        passwordInput.value = '';
-                        confirmPasswordInput.value = '';
-                        updatePasswordBars('');
-                        validateConfirm();
-                    } else {
-                        passwordFeedback.textContent = '❌ ' + (data.message || 'Erro desconhecido');
-                        passwordFeedback.className = 'text-danger small mt-2';
-                    }
-                })
-                .catch(err => {
-                    console.error('Password update error:', err);
-                    passwordFeedback.textContent = '❌ ' + err.message;
-                    passwordFeedback.className = 'text-danger small mt-2';
-                })
-                .finally(() => {
-                    btnUpdatePassword.disabled = false;
-                    btnUpdatePassword.innerHTML = 'Atualizar Senha';
-                });
-        });
     });
 </script>
+
+
+
+
+
+<fieldset class="border border-gray-300 rounded-2 p-8 mb-5">
+    <legend class="float-none w-auto px-3 fs-5 fw-bold text-gray-700">Planos:</legend>
+
+    <div class="row gy-4">
+
+        <!--begin::Interruptor Mensal/Anual-->
+        <div class="mb-10 text-center">
+            <button
+                class="btn btn-color-gray-600 btn-active btn-active-secondary px-6 py-3 me-2
+                {{ ($item->personPlan?->payment_cycle ?? 'month') === 'month' ? 'active' : '' }}"
+                data-kt-plan="month">Mensal</button>
+
+            <button
+                class="btn btn-color-gray-600 btn-active btn-active-secondary px-6 py-3
+                {{ ($item->personPlan?->payment_cycle ?? 'month') === 'annual' ? 'active' : '' }}"
+                data-kt-plan="annual">Anual</button>
+        </div>
+
+        <!--begin::Planos-->
+        <div class="d-flex flex-wrap justify-content-between gap-5">
+            @foreach ($plans as $plan)
+                @php
+                    $currentPlan = strtolower($item->personPlan?->plan?->name ?? '');
+                    $isActive = $currentPlan
+                        ? $currentPlan === strtolower($plan->name)
+                        : $loop->first;
+                @endphp
+
+                <label data-plan="{{ strtolower($plan->name) }}"
+                       class="btn btn-outline btn-outline-dashed btn-active-light-primary flex-fill text-center p-6 {{ $isActive ? 'active' : '' }}">
+                    <h2 class="fs-3 fw-bold mb-1">{{ $plan->name }}</h2>
+                    <div>
+                        <span class="fs-7 opacity-50 text-muted">R$</span>
+                        <span class="fs-2x fw-bold text-primary"
+                              data-kt-plan-price-month="{{ $plan->price_monthly }}"
+                              data-kt-plan-price-annual="{{ $plan->price_yearly / 12 }}">
+                              {{ number_format($plan->price_monthly, 0, ',', '.') }}
+                        </span>
+                        <span class="fs-7 opacity-50 text-muted"
+                              data-kt-element="period">/Mês</span>
+                    </div>
+                </label>
+            @endforeach
+        </div>
+        <!--end::Planos-->
+
+        <input type="hidden" name="selected_period" id="selected_period"
+               value="{{ $item->personPlan?->payment_cycle ?? 'month' }}">
+
+        <input type="hidden" name="selected_plan" id="selected_plan"
+               value="{{ strtolower($item->personPlan?->plan?->name ?? $plans->first()->name ?? '') }}">
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const buttons = document.querySelectorAll("[data-kt-plan]");
+                const prices = document.querySelectorAll("[data-kt-plan-price-month]");
+                const labels = document.querySelectorAll("[data-plan]");
+                const inputPlan = document.getElementById("selected_plan");
+                const inputPeriod = document.getElementById("selected_period");
+
+                const currentPeriod = "{{ $item->personPlan?->payment_cycle ?? 'month' }}";
+                const currentPlan = "{{ strtolower($item->personPlan?->plan?->name ?? $plans->first()->name ?? '') }}";
+
+                const params = new URLSearchParams(window.location.search);
+                const planFromUrl = params.get("plans");
+                const periodFromUrl = params.get("period");
+
+                function formatCurrency(value) {
+                    const num = parseFloat(value.toString().replace(",", "."));
+                    return num.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+
+                function setPeriod(period) {
+                    buttons.forEach(b => b.classList.remove("active"));
+                    const btn = document.querySelector(`[data-kt-plan="${period}"]`);
+                    if (btn) btn.classList.add("active");
+
+                    prices.forEach(span => {
+                        const monthValue = parseFloat(span.dataset.ktPlanPriceMonth);
+                        const annualValue = parseFloat(span.dataset.ktPlanPriceAnnual);
+                        const label = span.closest("label");
+
+                        let extraTop = label.querySelector(".plan-extra-top");
+                        let extraBottom = label.querySelector(".plan-extra-bottom");
+                        if (!extraTop) {
+                            extraTop = document.createElement("div");
+                            extraTop.className = "plan-extra-top text-muted small fw-semibold mb-1";
+                            label.prepend(extraTop);
+                        }
+                        if (!extraBottom) {
+                            extraBottom = document.createElement("div");
+                            extraBottom.className = "plan-extra-bottom text-muted small mt-1";
+                            label.append(extraBottom);
+                        }
+
+                        const periodEl = span.parentElement.querySelector("[data-kt-element='period']");
+
+                        if (period === "annual") {
+                            const total = annualValue * 12;
+                            extraTop.innerHTML = `Em até <strong>12x</strong>`;
+                            extraBottom.innerHTML =
+                                `Total: <strong>R$ ${formatCurrency(total)}</strong> por ano.`;
+                            span.textContent = formatCurrency(annualValue);
+                            if (periodEl) periodEl.textContent = "/Mês";
+                        } else {
+                            extraTop.innerHTML = "";
+                            extraBottom.innerHTML = "";
+                            span.textContent = formatCurrency(monthValue);
+                            if (periodEl) periodEl.textContent = "/Mês";
+                        }
+                    });
+
+                    inputPeriod.value = period;
+                }
+
+                function setPlan(plan) {
+                    labels.forEach(l => l.classList.remove("active"));
+                    const match = document.querySelector(`[data-plan="${plan}"]`);
+                    if (match) {
+                        match.classList.add("active");
+                        inputPlan.value = plan;
+                    }
+                }
+
+                // Inicializa com dados do banco ou URL
+                if (periodFromUrl) setPeriod(periodFromUrl);
+                else setPeriod(currentPeriod);
+
+                if (planFromUrl) setPlan(planFromUrl);
+                else setPlan(currentPlan);
+
+                // Clique em planos
+                labels.forEach(label => {
+                    label.addEventListener("click", () => {
+                        labels.forEach(l => l.classList.remove("active"));
+                        label.classList.add("active");
+                        inputPlan.value = label.dataset.plan;
+                    });
+                });
+
+                // Clique no interruptor Mensal/Anual
+                buttons.forEach(btn => {
+                    btn.addEventListener("click", e => {
+                        e.preventDefault();
+                        setPeriod(btn.getAttribute("data-kt-plan"));
+                    });
+                });
+            });
+        </script>
+    </div>
+</fieldset>
+
+
 
 {{-- Criado / Alterado --}}
 @if (isset($item))

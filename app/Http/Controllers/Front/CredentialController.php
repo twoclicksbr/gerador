@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Api\Token;
 use Illuminate\Http\Request;
 use App\Models\Api\Credential;
 
@@ -41,12 +42,47 @@ class CredentialController extends Controller
         // Corrige campo booleano
         $data['active'] = $request->has('active') ? 1 : 0;
 
+        // Cria a credential
         $modelClass = "App\\Models\\Api\\" . Str::studly($module);
         $record = $modelClass::create($data);
 
+        // Função geradora de token
+        $generateToken = function ($prefix) {
+            $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            $randomPart = '';
+            for ($i = 0; $i < 80; $i++) {
+                $randomPart .= $chars[random_int(0, strlen($chars) - 1)];
+            }
+            return "{$prefix}_{$randomPart}";
+        };
+
+        // Dados comuns
+        $ip = $request->ip();
+        $device = $request->header('User-Agent');
+
+        // Cria token sandbox (public)
+        \App\Models\Api\Token::create([
+            'id_credential' => $record->id,
+            'environment'   => 'sandbox',
+            'token'         => 'public_' . Str::random(60),
+            'ip_address'    => $ip,
+            'device_info'   => $device,
+            'active'        => 1,
+        ]);
+
+        // Cria token production (secret)
+        \App\Models\Api\Token::create([
+            'id_credential' => $record->id,
+            'environment'   => 'production',
+            'token'         => 'secret_' . Str::random(60),
+            'ip_address'    => $ip,
+            'device_info'   => $device,
+            'active'        => 1,
+        ]);
+
         return redirect()
             ->route('admin.module.index', ['module' => $module])
-            ->with('success', 'Registro criado com sucesso!');
+            ->with('success', 'Registro criado com sucesso! Tokens gerados automaticamente.');
     }
 
     public function edit(Request $request, $module, $id)

@@ -23,4 +23,9 @@ class Credential extends Model
     {
         return $this->belongsTo(Plan::class, 'id_plan');
     }
+
+    public function token()
+    {
+        return $this->hasOne(Token::class, 'id_credential');
+    }
 }

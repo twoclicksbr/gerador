@@ -7,6 +7,8 @@ use App\Http\Requests\Api\PersonRequest;
 use App\Models\Api\Address;
 use App\Models\Api\Credential;
 use App\Models\Api\Person;
+use App\Models\Api\Plan;
+use App\Models\Api\PersonPlan;
 use App\Models\Api\TypeAddress;
 
 use Illuminate\Http\Request;
@@ -33,39 +35,74 @@ class PersonController extends Controller
     {
         $credentials = Credential::orderBy('name')->get();
         $typeAddresses = TypeAddress::orderBy('name')->get();
+        $plans = Plan::orderBy('price_monthly')->get(); // ✅
 
-        return view("admin.$module.create", compact('module', 'credentials', 'typeAddresses'));
+        return view("admin.$module.create", compact(
+            'module', 'credentials', 'typeAddresses', 'plans'
+        ));
     }
 
-    public function store($request, $module)
+    public function store(Request $request, $module)
     {
-        // ❌ PROBLEMA AQUI: validated() não existe em Request genérico
         Log::info('🟢 [PersonController@store] Início do cadastro', ['payload' => $request->all()]);
 
         try {
             DB::beginTransaction();
 
-            // ✅ Use validate() em vez de validated()
             $validated = $request->validate([
                 'id_credential' => 'required|exists:tc_credential,id',
                 'name'          => 'required|string|max:191',
                 'whatsapp'      => 'nullable|string|max:20',
                 'cpf_cnpj'      => 'nullable|string|max:20',
                 'gender'        => 'nullable|string|max:20',
-                'birthdate'     => 'nullable|date',
+                'birthdate'     => 'nullable|date_format:d/m/Y',
                 'active'        => 'boolean',
+                'email'         => 'required|email|unique:tc_person_user,email,NULL,id,deleted_at,NULL',
+                'password'      => [
+                    'required',
+                    'min:8',
+                    'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/',
+                    'confirmed'
+                ],
+                'selected_plan'   => 'required|string',
+                'selected_period' => 'required|in:month,annual',
             ]);
 
-            Log::info('👤 Pessoa criada', [
-                'person_id' => $person->id,
-                'name'      => $person->name,
+            // 📅 Formata data de nascimento
+            $birthdate = null;
+            if (!empty($validated['birthdate'])) {
+                try {
+                    $birthdate = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['birthdate'])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $birthdate = null;
+                }
+            }
+
+            $cpfCnpj = preg_replace('/\D/', '', $validated['cpf_cnpj'] ?? '');
+
+            // 👤 Pessoa
+            $person = Person::create([
+                'id_credential' => $validated['id_credential'],
+                'name'          => $validated['name'],
+                'gender'        => $validated['gender'] ?? null,
+                'birthdate'     => $birthdate,
+                'cpf_cnpj'      => $cpfCnpj,
+                'whatsapp'      => $validated['whatsapp'],
+                'active'        => $request->has('active') ? 1 : 0,
             ]);
 
-            // ============================================================
-            // Criação do endereço (se houver)
-            // ============================================================
+            // 🧑‍💻 Usuário
+            $person->user()->create([
+                'id_credential'  => $validated['id_credential'],
+                'email'          => $validated['email'],
+                'password'       => bcrypt($validated['password']),
+                'remember_token' => 0,
+                'active'         => 1,
+            ]);
+
+            // 🏠 Endereço
             if ($request->filled('zip_code')) {
-                $address = Address::create([
+                Address::create([
                     'id_credential'   => $validated['id_credential'],
                     'id_person'       => $person->id,
                     'id_type_address' => $request->id_type_address ?? null,
@@ -78,8 +115,31 @@ class PersonController extends Controller
                     'city'            => $request->city,
                     'state'           => strtoupper($request->state ?? ''),
                 ]);
+            }
 
-                Log::info('🏠 Endereço criado', ['address_id' => $address->id]);
+            // 💳 Plano
+            $plan = Plan::whereRaw('LOWER(name) = ?', [strtolower($validated['selected_plan'])])->first();
+            if ($plan) {
+                $start = now();
+                $end = $validated['selected_period'] === 'annual'
+                    ? now()->addYear()
+                    : now()->addMonth();
+
+                PersonPlan::create([
+                    'id_credential' => $validated['id_credential'],
+                    'id_person'     => $person->id,
+                    'id_plan'       => $plan->id,
+                    'payment_cycle' => $validated['selected_period'],
+                    'dt_start'      => $start,
+                    'dt_end'        => $end,
+                    'active'        => 1,
+                ]);
+
+                Log::info('💳 Plano associado', [
+                    'person_id' => $person->id,
+                    'plan_id'   => $plan->id,
+                    'cycle'     => $validated['selected_period']
+                ]);
             }
 
             DB::commit();
@@ -106,60 +166,74 @@ class PersonController extends Controller
         $item = Person::withTrashed()
             ->with([
                 'address' => fn($q) => $q->where('main', 1),
-                'user'
+                'user',
+                'personPlan', // ✅ relação com tc_person_plan
             ])
             ->findOrFail($id);
 
         $isTrashed = $item->trashed();
         $credentials = Credential::orderBy('name')->get();
         $typeAddresses = TypeAddress::orderBy('name')->get();
+        $plans = Plan::orderBy('price_monthly')->get();
 
-        return view("admin.$module.edit", compact('item', 'module', 'isTrashed', 'credentials', 'typeAddresses'));
+        return view("admin.$module.edit", compact(
+            'item', 'module', 'isTrashed', 'credentials', 'typeAddresses', 'plans'
+        ));
     }
 
-    public function update($request, $module, $id)
+    public function update(Request $request, $module, $id)
     {
-        Log::info('🟡 [PersonController@update] Atualização iniciada', ['id' => $id]);
+        Log::info('🟡 [PersonController@update] Início da atualização', [
+            'id' => $id,
+            'payload' => $request->all()
+        ]);
 
         try {
             DB::beginTransaction();
 
-            // ✅ MUDE AQUI: validated() → validate()
             $validated = $request->validate([
-                'id_credential' => 'required|exists:tc_credential,id',
-                'name'          => 'required|string|max:191',
-                'whatsapp'      => 'nullable|string|max:20',
-                'cpf_cnpj'      => 'nullable|string|max:20',
-                'gender'        => 'nullable|string|max:20',
-                'birthdate'     => 'nullable|date_format:d/m/Y',
-                'active'        => 'boolean',
+                'id_credential'   => 'required|exists:tc_credential,id',
+                'name'            => 'required|string|max:191',
+                'whatsapp'        => 'nullable|string|max:20',
+                'cpf_cnpj'        => 'nullable|string|max:20',
+                'gender'          => 'nullable|string|max:20',
+                'birthdate'       => 'nullable|date_format:d/m/Y',
+                'active'          => 'boolean',
+                'selected_plan'   => 'required|string',
+                'selected_period' => 'required|in:month,annual',
             ]);
 
-            // ✅ Converte a data de d/m/Y para Y-m-d antes de salvar
+            // 📅 Converte data de nascimento
             $birthdate = null;
             if (!empty($validated['birthdate'])) {
-                $birthdate = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['birthdate'])->format('Y-m-d');
+                try {
+                    $birthdate = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['birthdate'])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $birthdate = null;
+                }
             }
 
+            $cpfCnpj = preg_replace('/\D/', '', $validated['cpf_cnpj'] ?? '');
+
+            // 👤 Atualiza pessoa
             $person = Person::findOrFail($id);
             $person->update([
-                'name'      => $validated['name'],
-                'gender'    => $validated['gender'] ?? null,
-                'birthdate' => $birthdate,
-                'cpf_cnpj'  => $validated['cpf_cnpj'],
-                'whatsapp'  => $validated['whatsapp'],
-                'active'    => $request->has('active') ? 1 : 0,
+                'id_credential' => $validated['id_credential'],
+                'name'          => $validated['name'],
+                'gender'        => $validated['gender'] ?? null,
+                'birthdate'     => $birthdate,
+                'cpf_cnpj'      => $cpfCnpj,
+                'whatsapp'      => $validated['whatsapp'],
+                'active'        => $request->has('active') ? 1 : 0,
             ]);
 
-            Log::info('👤 Pessoa atualizada', ['person_id' => $id]);
+            Log::info('👤 Pessoa atualizada', ['person_id' => $person->id]);
 
-            // ============================================================
-            // Atualização de endereço (se houver)
-            // ============================================================
+            // 🏠 Atualiza/cria endereço
             if ($request->filled('zip_code')) {
                 $address = Address::where('id_person', $id)->where('main', 1)->first();
-
                 $addressData = [
+                    'id_credential'   => $validated['id_credential'],
                     'id_type_address' => $request->id_type_address ?? null,
                     'cep'             => $request->zip_code,
                     'street'          => $request->street,
@@ -168,24 +242,48 @@ class PersonController extends Controller
                     'district'        => $request->district,
                     'city'            => $request->city,
                     'state'           => strtoupper($request->state ?? ''),
+                    'main'            => true,
                 ];
 
                 if ($address) {
                     $address->update($addressData);
+                    Log::info('🏠 Endereço atualizado', ['address_id' => $address->id]);
                 } else {
-                    Address::create([
-                        'id_credential'   => $person->id_credential,
-                        'id_person'       => $id,
-                        ...$addressData,
-                        'main'            => true,
-                    ]);
+                    Address::create(['id_person' => $id] + $addressData);
+                    Log::info('🏠 Endereço criado', ['person_id' => $id]);
                 }
+            }
 
-                Log::info('🏠 Endereço atualizado/criado', ['person_id' => $id]);
+            // 💳 Atualiza plano
+            $plan = Plan::whereRaw('LOWER(name) = ?', [strtolower($validated['selected_plan'])])->first();
+            if ($plan) {
+                $personPlan = PersonPlan::where('id_person', $person->id)->first();
+
+                $dtStart = now();
+                $dtEnd = $validated['selected_period'] === 'annual'
+                    ? now()->addYear()
+                    : now()->addMonth();
+
+                $dataPlan = [
+                    'id_credential' => $validated['id_credential'],
+                    'id_plan'       => $plan->id,
+                    'payment_cycle' => $validated['selected_period'],
+                    'dt_start'      => $dtStart,
+                    'dt_end'        => $dtEnd,
+                    'active'        => 1,
+                ];
+
+                if ($personPlan) {
+                    $personPlan->update($dataPlan);
+                    Log::info('💳 Plano atualizado', ['person_plan_id' => $personPlan->id]);
+                } else {
+                    PersonPlan::create(['id_person' => $person->id] + $dataPlan);
+                    Log::info('💳 Plano criado', ['person_id' => $person->id]);
+                }
             }
 
             DB::commit();
-            Log::info('✅ [PersonController@update] Registro atualizado com sucesso');
+            Log::info('✅ [PersonController@update] Atualização concluída com sucesso');
 
             return redirect()
                 ->route('admin.module.index', ['module' => $module])

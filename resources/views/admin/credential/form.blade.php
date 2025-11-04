@@ -36,16 +36,6 @@
                     const slugInput = document.getElementById('slug_input');
                     const button = document.getElementById('copy_slug_btn');
 
-                    // Gera slug automaticamente
-                    nameInput?.addEventListener('input', function() {
-                        const slug = this.value
-                            .toLowerCase()
-                            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                            .replace(/[^a-z0-9]+/g, '-')
-                            .replace(/^-+|-+$/g, '');
-                        slugInput.value = slug;
-                    });
-
                     // Inicia clipboard
                     const clipboard = new ClipboardJS(button, {
                         text: () => slugInput.value
@@ -68,22 +58,32 @@
     </div>
 
     {{-- Data de Validade --}}
+    @php
+        use Carbon\Carbon;
+        $defaultDate = isset($item)
+            ? Carbon::parse($item->dt_limit_access)->format('d/m/Y')
+            : Carbon::now()->addDays(7)->format('d/m/Y');
+    @endphp
+
     <div class="col-md-3">
         <label class="form-label">Data de Validade</label>
         <div class="input-group input-group-solid" id="kt_td_picker_date">
             <input id="dt_limit_access" name="dt_limit_access" type="text"
-                class="form-control form-control-solid border-end-0" placeholder="Selecione a data"
-                data-td-target="#dt_limit_access" data-td-toggle="datetimepicker"
-                value="{{ old('dt_limit_access', isset($item) ? \Carbon\Carbon::parse($item->dt_limit_access)->format('d/m/Y') : '') }}"
-                autocomplete="off" {{ $disabled }} />
+                   class="form-control form-control-solid border-end-0"
+                   placeholder="Selecione a data"
+                   data-td-target="#dt_limit_access"
+                   data-td-toggle="datetimepicker"
+                   value="{{ old('dt_limit_access', $defaultDate) }}"
+                   autocomplete="off" {{ $disabled }} />
 
-            <span class="input-group-text border-start-0 px-3 bg-light-primary" data-td-target="#dt_limit_access"
-                data-td-toggle="datetimepicker" style="cursor: pointer;">
-                <i class="ki-duotone ki-calendar fs-2 text-primary" style="margin-top: 1px;">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                </i>
-            </span>
+            <span class="input-group-text border-start-0 px-3 bg-light-primary"
+                  data-td-target="#dt_limit_access"
+                  data-td-toggle="datetimepicker" style="cursor: pointer;">
+            <i class="ki-duotone ki-calendar fs-2 text-primary" style="margin-top: 1px;">
+                <span class="path1"></span>
+                <span class="path2"></span>
+            </i>
+        </span>
         </div>
 
         @if (empty($isTrashed))
