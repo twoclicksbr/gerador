@@ -1,13 +1,18 @@
 <div class="row mb-5">
     @php
         $disabled = isset($isTrashed) && $isTrashed ? 'disabled' : '';
+        if (isset($item)) {
+            $disabledCredentialEnv = 'disabled'; // travar credencial e ambiente no edit
+        } else {
+            $disabledCredentialEnv = '';
+        }
     @endphp
 
     {{-- Credencial --}}
     <div class="col-md-3">
         <label class="required form-label">Credencial</label>
         <select name="id_credential" class="form-select form-select-solid" data-control="select2"
-                required {{ $disabled }}>
+                required {{ $disabled }} {{ $disabledCredentialEnv }}>
             <option value="">Selecione</option>
             @foreach ($credentials as $credential)
                 <option value="{{ $credential->id }}"
@@ -16,6 +21,7 @@
                 </option>
             @endforeach
         </select>
+        <input type="hidden" name="id_credential" value="{{ $item->id_credential ?? '' }}">
         @error('id_credential')
         <div class="text-danger fs-7 mt-2">{{ $message }}</div>
         @enderror
@@ -25,7 +31,7 @@
     <div class="col-md-3">
         <label class="required form-label">Ambiente</label>
         <select name="environment" class="form-select form-select-solid" data-control="select2"
-                required {{ $disabled }}>
+                required {{ $disabled }} {{ $disabledCredentialEnv }}>
             <option value="">Selecione</option>
             <option value="sandbox" {{ old('environment', $item->environment ?? '') === 'sandbox' ? 'selected' : '' }}>
                 Sandbox
@@ -35,6 +41,7 @@
                 Produção
             </option>
         </select>
+        <input type="hidden" name="environment" value="{{ $item->environment ?? '' }}">
         @error('environment')
         <div class="text-danger fs-7 mt-2">{{ $message }}</div>
         @enderror

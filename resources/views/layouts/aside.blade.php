@@ -67,16 +67,6 @@
                         </a>
                     </div>
 
-                    <div class="menu-item">
-                        <a href="" class="menu-link">
-                            <span class="menu-title">Tags</span>
-                        </a>
-                    </div>
-                    <div class="menu-item">
-                        <a href="" class="menu-link">
-                            <span class="menu-title">Ask Question</span>
-                        </a>
-                    </div>
                 </div>
             @endif
 
