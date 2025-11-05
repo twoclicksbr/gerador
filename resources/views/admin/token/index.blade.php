@@ -21,6 +21,7 @@
                             <thead>
                             <tr class="fw-bold text-muted bg-light">
                                 {{-- <th style="width: 10%">Credencial</th> --}}
+                                <th class="ps-4" style="width: 20%">Projeto</th>
                                 <th style="width: 10%">Ambiente</th>
                                 <th class="ps-4 min-w-250px rounded-start">Token</th>
 
@@ -47,6 +48,15 @@
                                     <tr class="{{ $item->trashed() ? 'bg-dark bg-opacity-10' : '' }}">
                                         {{-- <td>{{ $item->credential->name ?? '—' }}</td> --}}
 
+                                        {{-- Projeto 🆕 --}}
+                                        <td class="text-nowrap ps-4">
+                                            <a href="{{ route('admin.module.edit', ['module' => 'token', 'id' => $item->id]) }}"
+                                               class="fw-semibold fs-6 text-hover-primary {{ $item->trashed() ? 'text-gray-500 text-decoration-line-through' : 'text-primary' }}">
+                                                {{ $item->project->name ?? '—' }}
+                                            </a>
+
+                                        </td>
+
                                         <td>
                                             <span class="badge {{ $item->environment === 'sandbox' ? 'badge-light-warning' : 'badge-light-info' }}">
                                                 {{ $item->environment === 'sandbox' ? 'Sandbox' : 'Produção' }}
@@ -54,10 +64,30 @@
                                         </td>
 
                                         <td class="ps-4">
-                                            <a href="{{ route('admin.module.edit', ['module' => 'token', 'id' => $item->id]) }}"
-                                               class="fw-semibold fs-6 text-hover-primary {{ $item->trashed() ? 'text-gray-500 text-decoration-line-through' : 'text-primary' }}">
-                                                {{ $item->token }}
-                                            </a>
+                                            <button type="button"
+                                                    class="btn btn-icon btn-light btn-sm me-2"
+                                                    data-clipboard-text="{{ $item->token }}"
+                                                    title="Copiar token">
+                                                <i class="ki-outline ki-copy fs-3"></i>
+                                            </button>
+                                            {{ \Illuminate\Support\Str::limit($item->token, 40) }}
+
+                                            <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function () {
+                                                    const clipboard = new ClipboardJS('[data-clipboard-text]');
+                                                    clipboard.on('success', function(e) {
+                                                        const btn = e.trigger;
+                                                        const icon = btn.querySelector('i');
+                                                        icon.classList.remove('ki-copy');
+                                                        icon.classList.add('ki-check', 'text-success');
+                                                        setTimeout(() => {
+                                                            icon.classList.remove('ki-check', 'text-success');
+                                                            icon.classList.add('ki-copy');
+                                                        }, 1500);
+                                                    });
+                                                });
+                                            </script>
                                         </td>
 
                                         <td>

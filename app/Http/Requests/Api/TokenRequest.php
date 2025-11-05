@@ -15,6 +15,7 @@ class TokenRequest extends FormRequest
     {
         return [
             'id_credential' => 'required|exists:tc_credential,id',
+            'id_project'    => 'nullable|exists:tc_project,id',
             'environment'   => 'required|in:production,sandbox',
             'token'         => 'required|string|max:255|unique:tc_token,token,' . $this->id,
             'ip_address'    => 'nullable|string|max:191',
@@ -28,6 +29,8 @@ class TokenRequest extends FormRequest
         return [
             'id_credential.required' => 'A credencial é obrigatória.',
             'id_credential.exists'   => 'A credencial informada não existe.',
+
+            'id_project.exists'      => 'O projeto informado não existe.',
 
             'environment.required'   => 'O ambiente é obrigatório.',
             'environment.in'         => 'O ambiente deve ser production ou sandbox.',

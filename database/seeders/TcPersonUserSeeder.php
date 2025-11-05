@@ -17,7 +17,7 @@ class TcPersonUserSeeder extends Seeder
                 'id'             => 1,
                 'id_credential'  => 1,
                 'id_person'      => 1,
-                'email'          => 'alex@twoclicks.com.br',
+                'email'          => 'alex@devsapi.com.br',
                 'password'       => bcrypt('Millena2012@'),
                 'active'         => 1,
                 'remember_token' => 0,

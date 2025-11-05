@@ -6,24 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Token extends Model
+class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'tc_token';
+    protected $table = 'tc_project';
 
     protected $fillable = [
         'id_credential',
-        'id_project',
-        'environment',
-        'token',
-        'ip_address',
-        'device_info',
+        'name',
+        'slug',
         'active',
-    ];
-
-    protected $hidden = [
-        'id_credential',
+        'description',
     ];
 
     public function credential()
@@ -31,8 +25,8 @@ class Token extends Model
         return $this->belongsTo(Credential::class, 'id_credential');
     }
 
-    public function project()
+    public function tokens()
     {
-        return $this->belongsTo(Project::class, 'id_project');
+        return $this->hasMany(Token::class, 'id_project');
     }
 }

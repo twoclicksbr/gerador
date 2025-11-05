@@ -28,7 +28,7 @@
     </div>
 
     {{-- Ambiente --}}
-    <div class="col-md-3">
+    <div class="col-md-2">
         <label class="required form-label">Ambiente</label>
         <select name="environment" class="form-select form-select-solid" data-control="select2"
                 required {{ $disabled }} {{ $disabledCredentialEnv }}>
@@ -47,8 +47,26 @@
         @enderror
     </div>
 
+    {{-- Projeto --}}
+    <div class="col-md-3">
+        <label class="required form-label">Projeto</label>
+        <select name="id_project" class="form-select form-select-solid" required data-control="select2" {{ $disabled }} {{ $disabledCredentialEnv }}>
+            <option value="">Selecione</option>
+            @foreach ($projects as $project)
+                <option value="{{ $project->id }}"
+                    {{ old('id_project', $item->id_project ?? '') == $project->id ? 'selected' : '' }}>
+                    {{ $project->name }}
+                </option>
+            @endforeach
+        </select>
+        <input type="hidden" name="id_project" value="{{ $item->id_project ?? '' }}">
+        @error('id_project')
+        <div class="text-danger fs-7 mt-2">{{ $message }}</div>
+        @enderror
+    </div>
+
     {{-- Token --}}
-    <div class="col-md-6">
+    <div class="col-md-4">
         <label class="required form-label">Token</label>
 
         <div class="input-group input-group-sm" style="border-radius: 0.75rem; overflow: hidden;">

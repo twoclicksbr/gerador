@@ -110,43 +110,6 @@ class RegisterController extends Controller
             ]);
 
             // ============================================================
-            // Criação dos tokens da credencial (produção e sandbox)
-            // ============================================================
-
-            // Prefixos legíveis
-            $prefixProd = 'secret_';
-            $prefixSandbox = 'public_';
-
-            // Token de produção
-            $tokenProd = Token::create([
-                'id_credential' => $credential->id,
-                'token'         => $prefixProd . Str::random(60),
-                'environment'   => 'production',
-                'ip_address'    => $request->ip(),
-                'device_info'   => $request->header('User-Agent'),
-                'active'        => 1,
-                'dt_expiration' => now()->addHours(24),
-            ]);
-
-            // Token de sandbox
-            $tokenSandbox = Token::create([
-                'id_credential' => $credential->id,
-                'token'         => $prefixSandbox . Str::random(60),
-                'environment'   => 'sandbox',
-                'ip_address'    => $request->ip(),
-                'device_info'   => 'Sandbox environment',
-                'active'        => 1,
-                'dt_expiration' => now()->addDays(90),
-            ]);
-
-            Log::info('🔑 Tokens criados', [
-                'token_prod_value' => $tokenProd->token,
-                'token_sbx_id'     => $tokenSandbox->id,
-                'token_sbx_value'  => $tokenSandbox->token,
-            ]);
-
-
-            // ============================================================
             // Criação do endereço
             // ============================================================
             $address = Address::create([
@@ -163,9 +126,7 @@ class RegisterController extends Controller
                 'state'           => strtoupper($request->state),
             ]);
 
-            Log::info('🏠 Endereço criado', [
-                'address_id' => $address->id,
-            ]);
+            Log::info('🏠 Endereço criado', ['address_id' => $address->id]);
 
             // ============================================================
             // Vínculo com plano
@@ -207,11 +168,8 @@ class RegisterController extends Controller
             // ============================================================
             // Envio do e-mail de confirmação
             // ============================================================
-
-            // Gera token curto de 6 números
             $verifyToken = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-            // Envia o e-mail
             Mail::to($request->email)->send(new ConfirmEmail($user, $verifyToken));
 
             EmailConfirmation::updateOrCreate(
@@ -228,8 +186,8 @@ class RegisterController extends Controller
                 'token' => $verifyToken,
             ]);
 
-            // Confirma todas as informações no banco
             DB::commit();
+
             Log::info('✅ [RegisterController@store] Cadastro concluído com sucesso', [
                 'person_id' => $person->id,
                 'user_id'   => $user->id,
@@ -240,7 +198,6 @@ class RegisterController extends Controller
                 'register_email' => $request->email,
             ]);
 
-            // Retorna para página de confirmação de e-mail
             return redirect()->route('register.confirm');
         } catch (Throwable $e) {
             DB::rollBack();

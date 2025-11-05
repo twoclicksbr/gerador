@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             TcPersonUserSeeder::class,
             TcPersonPlanSeeder::class,
             TcAddressSeeder::class,
-            TcTokenSeeder::class,
+            // TcTokenSeeder::class,
         ]);
     }
 }

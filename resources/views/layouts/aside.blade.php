@@ -67,6 +67,16 @@
                         </a>
                     </div>
 
+                    <div class="menu-item">
+                        <a href="{{ route('admin.module.index', ['module' => 'project']) }}"
+                           class="menu-link {{ request()->is('admin/project*') ? 'active' : '' }}">
+                            <span class="menu-title">Projetos</span>
+                            <span class="badge badge-light-primary">
+                                {{ number_format(\App\Models\Api\Project::count(), 0, ',', '.') }}
+                            </span>
+                        </a>
+                    </div>
+
                 </div>
             @endif
 
